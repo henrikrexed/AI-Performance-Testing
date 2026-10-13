@@ -1,13 +1,11 @@
 name: Deploy docs site to GitHub Pages
 
-# Builds the KnightLoad Docusaurus site in website/ and deploys it to GitHub Pages.
+# Builds the KnightLoad Docusaurus site in website/ and publishes it to the
+# gh-pages branch, which GitHub Pages serves (Settings -> Pages -> Source:
+# "Deploy from a branch" -> gh-pages -> /root).
 #
-# Prerequisites (one-time, repo admin — board/Henrik):
-#   Settings -> Pages -> Build and deployment -> Source: "GitHub Actions".
-# The deploy itself uses the built-in GITHUB_TOKEN (pages: write below); it does
-# NOT need a personal PAT. A fine-grained PAT with Contents:write + Workflows:write
-# is only needed to push this workflow file and website/ into the repo in the
-# first place.
+# This uses only the built-in GITHUB_TOKEN with contents: write to push the
+# branch — no Pages-admin permission or manual artifact source required.
 
 on:
   push:
@@ -18,21 +16,15 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
-# Allow one concurrent deployment; let in-progress runs finish.
 concurrency:
-  group: pages
+  group: pages-deploy
   cancel-in-progress: false
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: website
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -46,29 +38,18 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+        working-directory: website
 
       - name: Build
         run: npm run build
+        working-directory: website
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
+      - name: Publish to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          # Enable the Pages site from within the workflow (uses GITHUB_TOKEN
-          # with pages: write) so no repo-admin step or admin PAT is required.
-          enablement: true
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: website/build
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: website/build
+          publish_branch: gh-pages
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+          commit_message: 'Deploy site from ${{ github.sha }}'
