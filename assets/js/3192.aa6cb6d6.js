@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkknightload_site||=[]).push([[3192],{3192(e,t,c){c.d(t,{createArchitectureServices:()=>i.S});var i=c(4549);c(184)}}]);
