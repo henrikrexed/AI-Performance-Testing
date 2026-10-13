@@ -54,14 +54,13 @@ BUYER_BASELINE = {"p50Ms": 3, "p95Ms": 95000, "p99Ms": 140000, "errorRate": 0.0}
 BROWSER_BASELINE = {"p50Ms": 3, "p95Ms": 38, "p99Ms": 45, "errorRate": 0.0}
 
 
-def main() -> int:
-    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument("--out", default=None, help="output dir (default: out/example-frontend; env WORKLOAD_OUT)")
-    args = ap.parse_args()
-    out_dir = Path(args.out or os.environ.get("WORKLOAD_OUT") or DEFAULT_OUT)
+def build_commerce(fx: dict):
+    """Commerce (Buyer / Browser) SCOPE assembly from a neutral extract `fx`.
 
-    fx = json.loads(FIXTURE.read_text())
-
+    Returns `(model, proposal, archetypes, coverage)`. Shared by `main()` (the bundled
+    worked example) and the general `cli.py` entry point, so the demo and the released
+    binary run the exact same deterministic pipeline.
+    """
     # --- G1: reconstruct behavioral archetypes (Buyer / Browser) from the trace span-tree ---
     journeys = [cl.Journey(op=j["op"], traces=j["traces"], svc_set=j["svc_set"]) for j in fx["journeys"]]
     archetypes = to_archetypes(
@@ -140,6 +139,18 @@ def main() -> int:
             "flows that place an order vs not), summed from the order-split query.",
         ],
     )
+
+    return model, proposal, archetypes, cov
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--out", default=None, help="output dir (default: out/example-frontend; env WORKLOAD_OUT)")
+    args = ap.parse_args()
+    out_dir = Path(args.out or os.environ.get("WORKLOAD_OUT") or DEFAULT_OUT)
+
+    fx = json.loads(FIXTURE.read_text())
+    model, proposal, archetypes, cov = build_commerce(fx)
 
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "workload-model.json").write_text(json.dumps(model, indent=2) + "\n")

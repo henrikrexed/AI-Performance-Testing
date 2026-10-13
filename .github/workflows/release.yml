@@ -69,14 +69,16 @@ jobs:
       - name: Build one-file binary
         shell: bash
         run: |
+          SCRIPTS=skills/workload-model/scripts
           python -m PyInstaller --noconfirm --onefile --clean \
             --name "$BINARY_NAME" \
-            --paths engine \
-            --add-data "engine/schema.json${{ matrix.data_sep }}." \
+            --paths "$SCRIPTS" \
+            --add-data "$SCRIPTS/schema.json${{ matrix.data_sep }}." \
+            --add-data "skills/workload-model/fixtures/example_extract.json${{ matrix.data_sep }}." \
             --hidden-import shaping --hidden-import archetypes \
             --hidden-import clustering --hidden-import emit \
-            --hidden-import g0_gate --hidden-import source_merge \
-            engine/cli.py
+            --hidden-import g0_gate --hidden-import build_example --hidden-import source_merge \
+            "$SCRIPTS/cli.py"
 
       - name: Smoke test the binary
         shell: bash
@@ -84,9 +86,14 @@ jobs:
           BIN="dist/$BINARY_NAME"
           [ "${{ matrix.target }}" = "windows-amd64" ] && BIN="dist/$BINARY_NAME.exe"
           "$BIN" --help
-          "$BIN" --extract examples/crewai-deepseek-agent/extract.json --out out_smoke --mode agentic
+          # commerce: bundled default fixture
+          "$BIN" --out out_smoke
           test -f out_smoke/workload-model.json
           test -f out_smoke/scenario-proposal.md
+          # agentic: bundled synthetic agentic extract
+          "$BIN" --extract skills/workload-model/fixtures/example_agentic_extract.json \
+                 --out out_agentic --mode agentic
+          test -f out_agentic/workload-model.json
 
       - name: Stage release asset
         id: stage
@@ -143,7 +150,7 @@ jobs:
           body: |
             ## AI-Performance-Testing — workload-model engine ${{ github.ref_name }}
 
-            Standalone builds of the SCOPE-stage engine (`python -m engine.cli`).
+            Standalone builds of the SCOPE-stage engine CLI (`workload-engine --extract … --out … --mode commerce|agentic`).
 
             **Binaries** (attached, each with a CycloneDX SBOM): `linux-amd64`,
             `linux-arm64`, `darwin-amd64`, `darwin-arm64`, `windows-amd64`.

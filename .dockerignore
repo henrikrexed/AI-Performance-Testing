@@ -1,0 +1,14 @@
+.git
+**/__pycache__
+**/*.pyc
+**/.pytest_cache
+**/node_modules
+**/tests
+**/out
+dist
+build
+*.spec
+examples
+tutorial
+docs
+presentation-matrix

@@ -128,7 +128,11 @@ pip install "jsonschema>=4,<5"
 python3 scripts/build_example.py
 cat out/example-frontend/scenario-proposal.md
 
-python3 -m pytest -q        # the engine's own test suite
+# the general CLI (exactly what the released binary / Docker image wrap):
+python3 scripts/cli.py --extract <extract.json> --out ./out --mode commerce   # or: --mode agentic
+# with no --extract it runs the bundled synthetic commerce fixture
+
+python3 -m pytest -q        # the engine's own test suite (68 passing)
 ```
 
 ---

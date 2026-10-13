@@ -1,0 +1,30 @@
+{
+  "_comment": "SYNTHETIC agentic-app extract for the engine's agentic worked example. Every number is invented for demonstration; nothing was measured from a real system. Mirrors the shape a backend adapter emits for a tool-using AI agent (terminal signal = execute_tool).",
+  "service": "example-agent",
+  "environment": "example-demo",
+  "deployment_environment": "non-production allowlist",
+  "timeframe": "2026-01-01T00:00:00Z -> 2026-01-01T03:00:00Z (3h synthetic window)",
+  "generated_at": "2026-01-01T00:00:00Z",
+  "access_log_availability": "unavailable",
+  "sampling_ratio": 1.0,
+  "front_end": { "resolved_op": "example-agent/request" },
+  "code_refs": { "entry_handler": "server.py:handle_request", "llm_call": "agent.py:call_llm" },
+  "archetype_split": {
+    "conversational_weight": 0.68,
+    "agentic_weight": 0.32,
+    "conversational_traces": 204,
+    "agentic_traces": 96,
+    "coverage": 1.0,
+    "tools_observed": ["web_search", "code_exec"]
+  },
+  "turn_baseline_agent_turn": {
+    "conversational": { "p50_ms": 900, "p95_ms": 2100, "p99_ms": 2600 },
+    "agentic": { "p50_ms": 1800, "p95_ms": 5200, "p99_ms": 7400 }
+  },
+  "span_trees": {
+    "conversational": "request -> llm.call",
+    "agentic": "request -> llm.call -> execute_tool -> llm.call"
+  },
+  "per_minute_cov": { "interior_counts": [120, 118, 122, 119, 121, 120, 123, 117] },
+  "arrival": { "arrival_rate_tps": 2.0, "mean_server_response_ms": 1500, "observed_concurrency": 3.0 }
+}
