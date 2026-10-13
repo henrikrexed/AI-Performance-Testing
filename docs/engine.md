@@ -44,6 +44,7 @@ workload-engine --help
 
 ```bash
 VERSION=v0.1.0
+# Apple Silicon: darwin-arm64 · Intel: darwin-amd64
 curl -fsSL -o workload-engine \
   "https://github.com/henrikrexed/AI-Performance-Testing/releases/download/${VERSION}/workload-engine-darwin-arm64"
 chmod +x workload-engine
@@ -127,11 +128,7 @@ pip install "jsonschema>=4,<5"
 python3 scripts/build_example.py
 cat out/example-frontend/scenario-proposal.md
 
-# the general CLI (exactly what the released binary / Docker image wrap):
-python3 scripts/cli.py --extract <extract.json> --out ./out --mode commerce   # or: --mode agentic
-# with no --extract it runs the bundled synthetic commerce fixture
-
-python3 -m pytest -q        # the engine's own test suite (68 passing)
+python3 -m pytest -q        # the engine's own test suite
 ```
 
 ---
@@ -143,13 +140,21 @@ The engine owns **SCOPE**. It is one stop in the methodology's
 [`methodology.md`](methodology.md)). The engine's job is to produce a model that a human
 can approve.
 
-```
-          ┌──────────── you / your coding agent ────────────┐   ┌─ human ─┐
-telemetry │ (adapter)         SCOPE                          │   │ VALIDATE│
-  ───────▶│ dtctl/DQL ─▶ extract.json ─▶ workload-engine ─▶  │   │   V1    │
-          │                              workload-model.json │──▶│ approve │──▶ SYNTHESIZE ─▶ EXECUTE ─▶ ANALYZE
-          │                              scenario-proposal.md│   │ (gate)  │     (renderer)   (loadtest-run) (baseline-diff)
-          └───────────────────────────────────────────────┘   └─────────┘
+```mermaid
+flowchart LR
+    T[telemetry] --> A
+    subgraph agent["you / your coding agent — SCOPE"]
+        direction LR
+        A["adapter: dtctl / DQL"] --> E[extract.json] --> W[workload-engine]
+        W --> M[workload-model.json]
+        W --> P[scenario-proposal.md]
+    end
+    subgraph human["human — VALIDATE / V1"]
+        G["approve (gate)"]
+    end
+    M --> G
+    P --> G
+    G --> S["SYNTHESIZE<br/>(renderer)"] --> X["EXECUTE<br/>(loadtest-run)"] --> N["ANALYZE<br/>(baseline-diff)"]
 ```
 
 ### Step 1 — produce a neutral extract (adapter, outside the engine)
