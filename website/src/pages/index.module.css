@@ -1,0 +1,177 @@
+/* Landing-page sections for KnightLoad. Brand tokens from src/css/custom.css. */
+
+.hero {
+  padding: 5rem 0 4rem;
+  background: linear-gradient(160deg, #1a1a2e 0%, #16213e 55%, #212e50 100%);
+  color: var(--kl-silver-hi);
+  text-align: center;
+}
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--kl-cyan);
+  margin-bottom: 1rem;
+}
+.heroTitle {
+  font-size: clamp(2rem, 4.5vw, 3.1rem);
+  line-height: 1.1;
+  max-width: 22ch;
+  margin: 0 auto 1.25rem;
+  color: var(--kl-silver-hi);
+}
+.heroSubhead {
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  font-weight: 500;
+  color: var(--kl-cyan);
+  margin-bottom: 1.5rem;
+}
+.heroSupport {
+  max-width: 60ch;
+  margin: 0 auto 2rem;
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: var(--kl-silver);
+}
+.heroButtons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.thesis {
+  padding: 4rem 0;
+}
+.thesis .container {
+  max-width: 70ch;
+}
+.thesis h2 {
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  margin-bottom: 1.5rem;
+}
+.pullQuote {
+  font-family: var(--ifm-heading-font-family);
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--ifm-color-primary);
+  border-left: 3px solid var(--ifm-color-primary);
+  padding-left: 1.25rem;
+  margin-top: 2rem;
+}
+
+.loopBand {
+  padding: 3.5rem 0;
+  background: var(--ifm-background-surface-color);
+  text-align: center;
+}
+.loopBand h2 {
+  font-size: clamp(1.5rem, 2.8vw, 2rem);
+  margin-bottom: 2rem;
+}
+.loopDiagram {
+  max-width: 920px;
+  margin: 0 auto;
+}
+.loopNote {
+  max-width: 60ch;
+  margin: 1.5rem auto 0;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.differentiators {
+  padding: 4rem 0;
+}
+.bandHeading {
+  text-align: center;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  margin-bottom: 2.5rem;
+}
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+.card {
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 12px;
+  padding: 1.5rem;
+  background: var(--ifm-background-color);
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+.card:hover {
+  border-color: var(--ifm-color-primary);
+  transform: translateY(-2px);
+}
+.card h3 {
+  font-size: 1.15rem;
+  margin-bottom: 0.75rem;
+}
+.card p {
+  color: var(--ifm-color-emphasis-700);
+  margin-bottom: 0;
+  font-size: 0.97rem;
+  line-height: 1.6;
+}
+
+.exporters {
+  padding: 4rem 0;
+  background: var(--ifm-background-surface-color);
+  text-align: center;
+}
+.bandLead {
+  max-width: 68ch;
+  margin: 0 auto 2.5rem;
+  color: var(--ifm-color-emphasis-800);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+.exporterRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+.exporterChip {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.25rem;
+  border-radius: 10px;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  background: var(--ifm-background-color);
+  text-align: left;
+}
+.exporterName {
+  font-family: var(--ifm-heading-font-family);
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: var(--ifm-color-primary);
+}
+.exporterNote {
+  font-size: 0.9rem;
+  color: var(--ifm-color-emphasis-700);
+  line-height: 1.5;
+}
+.bandCta {
+  margin-top: 0.5rem;
+}
+
+.closing {
+  padding: 4.5rem 0;
+  text-align: center;
+}
+.closing .container {
+  max-width: 60ch;
+}
+.closing h2 {
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  margin-bottom: 1.25rem;
+}
+.closing p {
+  color: var(--ifm-color-emphasis-800);
+  margin-bottom: 2rem;
+  font-size: 1.05rem;
+  line-height: 1.65;
+}

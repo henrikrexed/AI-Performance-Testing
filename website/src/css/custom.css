@@ -1,0 +1,93 @@
+/**
+ * KnightLoad brand layer — the "Signal Diamond" visual system.
+ *
+ * This file owns the brand tokens (palette, fonts) and the Mermaid theme.
+ *
+ * Palette:
+ *   INDIGO0 #1A1A2E deepest midnight   INDIGO1 #16213E midnight (bg)
+ *   INDIGO2 #212E50 raised panel       SILVER  #C7CDD6 brushed silver
+ *   SILVER_HI #E7EBF0                  SILVER_DIM #788091
+ *   CYAN    #2EE6D6 electric cyan (primary accent)   CYAN_DIM #1A8C84
+ *   AMBER   #FFB23E (alternate accent)
+ * Type: Space Grotesk (headings/wordmark) / Sora (body) — geometric modern sans.
+ * Wordmark is two-tone: "Knight" silver, "load" accent.
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Primary accent tuned for contrast on a light background (teal). */
+  --ifm-color-primary: #128075;
+  --ifm-color-primary-dark: #107366;
+  --ifm-color-primary-darker: #0f6c60;
+  --ifm-color-primary-darkest: #0c594f;
+  --ifm-color-primary-light: #149a8c;
+  --ifm-color-primary-lighter: #16a699;
+  --ifm-color-primary-lightest: #1ac4b4;
+
+  --kl-indigo-0: #1a1a2e;
+  --kl-indigo-1: #16213e;
+  --kl-indigo-2: #212e50;
+  --kl-silver: #c7cdd6;
+  --kl-silver-hi: #e7ebf0;
+  --kl-silver-dim: #788091;
+  --kl-cyan: #2ee6d6;
+  --kl-cyan-dim: #1a8c84;
+  --kl-amber: #ffb23e;
+
+  --ifm-font-family-base: 'Sora', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --ifm-heading-font-family: 'Space Grotesk', var(--ifm-font-family-base);
+  --ifm-code-font-size: 95%;
+  --ifm-heading-font-weight: 600;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.08);
+}
+
+/* Dark mode — the brand's native "night" palette. */
+[data-theme='dark'] {
+  --ifm-color-primary: #2ee6d6;
+  --ifm-color-primary-dark: #22d4c4;
+  --ifm-color-primary-darker: #1fc8b9;
+  --ifm-color-primary-darkest: #1aa699;
+  --ifm-color-primary-light: #4ee9db;
+  --ifm-color-primary-lighter: #5cebdf;
+  --ifm-color-primary-lightest: #84f0e7;
+
+  --ifm-background-color: #16213e;
+  --ifm-background-surface-color: #1a1a2e;
+  --ifm-navbar-background-color: #1a1a2e;
+  --ifm-footer-background-color: #12182c;
+  --ifm-heading-color: var(--kl-silver-hi);
+  --ifm-font-color-base: #c9cfda;
+  --docusaurus-highlighted-code-line-bg: rgba(46, 230, 214, 0.12);
+}
+
+.navbar {
+  border-bottom: 1px solid rgba(199, 205, 214, 0.12);
+}
+
+[data-theme='dark'] .footer {
+  --ifm-footer-link-color: var(--kl-silver);
+  --ifm-footer-title-color: var(--kl-silver-hi);
+}
+
+/* Two-tone wordmark: "Knight" silver, "load" accent. Used by the landing hero. */
+.kl-wordmark {
+  font-family: var(--ifm-heading-font-family);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.kl-wordmark .kl-knight {
+  color: var(--kl-silver-dim);
+}
+[data-theme='dark'] .kl-wordmark .kl-knight {
+  color: var(--kl-silver);
+}
+.kl-wordmark .kl-load {
+  color: var(--ifm-color-primary);
+}
+
+/* Mermaid diagrams sit on a subtle on-brand panel. */
+.docusaurus-mermaid-container,
+[data-theme='dark'] .docusaurus-mermaid-container {
+  background: transparent;
+}
