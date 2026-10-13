@@ -149,12 +149,13 @@ def main() -> int:
     args = ap.parse_args()
     out_dir = Path(args.out or os.environ.get("WORKLOAD_OUT") or DEFAULT_OUT)
 
-    fx = json.loads(FIXTURE.read_text())
+    fx = json.loads(FIXTURE.read_text(encoding="utf-8"))
     model, proposal, archetypes, cov = build_commerce(fx)
 
     out_dir.mkdir(parents=True, exist_ok=True)
-    (out_dir / "workload-model.json").write_text(json.dumps(model, indent=2) + "\n")
-    (out_dir / "scenario-proposal.md").write_text(proposal)
+    # Pin UTF-8 (proposal has non-ASCII like `≈`; Windows default cp1252 would fail).
+    (out_dir / "workload-model.json").write_text(json.dumps(model, indent=2) + "\n", encoding="utf-8")
+    (out_dir / "scenario-proposal.md").write_text(proposal, encoding="utf-8")
 
     g = evaluate_g0(model, dql_run_live=True, proposal_text=proposal)
     print(json.dumps(g.to_dict(), indent=2))

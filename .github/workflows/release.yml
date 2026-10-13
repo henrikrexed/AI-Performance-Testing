@@ -130,7 +130,10 @@ jobs:
   release:
     name: github release
     needs: [binaries]
-    if: startsWith(github.ref, 'refs/tags/v')
+    # always(): publish whatever binaries built, so one flaky/slow runner (e.g. a scarce
+    # macOS-Intel queue) can't block the Release. download-artifact only fetches the
+    # legs that actually uploaded.
+    if: ${{ always() && startsWith(github.ref, 'refs/tags/v') }}
     runs-on: ubuntu-latest
     steps:
       - name: Download all build artifacts

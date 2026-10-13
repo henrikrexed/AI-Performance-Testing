@@ -141,8 +141,10 @@ def run(extract: dict, out_dir: Path, mode: str) -> int:
         model, proposal, _cov = _build_agentic(extract)
 
     out_dir.mkdir(parents=True, exist_ok=True)
-    (out_dir / "workload-model.json").write_text(json.dumps(model, indent=2) + "\n")
-    (out_dir / "scenario-proposal.md").write_text(proposal)
+    # Pin UTF-8: the proposal contains non-ASCII (e.g. the `≈` sign); the platform default
+    # is cp1252 on Windows, which would raise UnicodeEncodeError.
+    (out_dir / "workload-model.json").write_text(json.dumps(model, indent=2) + "\n", encoding="utf-8")
+    (out_dir / "scenario-proposal.md").write_text(proposal, encoding="utf-8")
 
     g = evaluate_g0(model, dql_run_live=True, proposal_text=proposal)
     print(json.dumps(g.to_dict(), indent=2))
@@ -159,7 +161,7 @@ def main(argv=None) -> int:
     ap.add_argument("--mode", default="commerce", choices=["commerce", "agentic"],
                     help="behavioral split: commerce (Buyer/Browser) or agentic (Agentic/Conversational)")
     a = ap.parse_args(argv)
-    return run(json.loads(a.extract.read_text()), a.out, a.mode)
+    return run(json.loads(a.extract.read_text(encoding="utf-8")), a.out, a.mode)
 
 
 if __name__ == "__main__":

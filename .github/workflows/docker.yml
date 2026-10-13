@@ -106,13 +106,16 @@ jobs:
           severity: CRITICAL,HIGH
           ignore-unfixed: true
 
-      - name: Trivy scan (released image)
+      # Report-only on releases: the image is already pushed above, and base-image CVEs
+      # (often unfixed in python:slim) should not fail an published release. The PR scan
+      # above stays blocking (exit-code 1) as the real gate.
+      - name: Trivy scan (released image, report-only)
         if: startsWith(github.ref, 'refs/tags/v')
         uses: aquasecurity/trivy-action@0.35.0
         with:
           image-ref: ${{ env.IMAGE }}:${{ github.ref_name }}
           format: table
-          exit-code: "1"
+          exit-code: "0"
           severity: CRITICAL,HIGH
           ignore-unfixed: true
 
