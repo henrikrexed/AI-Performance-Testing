@@ -33,6 +33,9 @@ jobs:
   # 1. Cross-platform binaries. PyInstaller cannot cross-compile, so each target
   #    is built on a native runner (linux arm64 uses the GA `ubuntu-24.04-arm`
   #    runner — no QEMU emulation, which is slow and flaky for PyInstaller).
+  #    darwin-amd64 (macos-13 / Intel Mac) is intentionally excluded: Apple Silicon
+  #    (darwin-arm64 via macos-latest) is the primary macOS target and macos-13
+  #    runners are chronically scarce on GitHub-hosted infra.
   # ---------------------------------------------------------------------------
   binaries:
     name: binary (${{ matrix.target }})
@@ -46,9 +49,6 @@ jobs:
             data_sep: ":"
           - os: ubuntu-24.04-arm
             target: linux-arm64
-            data_sep: ":"
-          - os: macos-13
-            target: darwin-amd64
             data_sep: ":"
           - os: macos-latest
             target: darwin-arm64
@@ -156,7 +156,7 @@ jobs:
             Standalone builds of the SCOPE-stage engine CLI (`workload-engine --extract … --out … --mode commerce|agentic`).
 
             **Binaries** (attached, each with a CycloneDX SBOM): `linux-amd64`,
-            `linux-arm64`, `darwin-amd64`, `darwin-arm64`, `windows-amd64`.
+            `linux-arm64`, `darwin-arm64` (Apple Silicon), `windows-amd64`.
 
             **Container image** (built + pushed by the `docker` workflow):
             `docker pull ghcr.io/henrikrexed/ai-performance-testing:${{ github.ref_name }}`

@@ -44,7 +44,6 @@ workload-engine --help
 
 ```bash
 VERSION=v0.1.0
-# Apple Silicon: darwin-arm64 · Intel: darwin-amd64
 curl -fsSL -o workload-engine \
   "https://github.com/henrikrexed/AI-Performance-Testing/releases/download/${VERSION}/workload-engine-darwin-arm64"
 chmod +x workload-engine
