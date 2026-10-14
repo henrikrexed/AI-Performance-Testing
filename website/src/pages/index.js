@@ -2,6 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import useBaseUrl from '@docusaurus/useBaseUrl';
 import Layout from '@theme/Layout';
 import Mermaid from '@theme/Mermaid';
 import styles from './index.module.css';
@@ -42,11 +43,12 @@ const EXPORTERS = [
 ];
 
 function Hero() {
+  const logoUrl = useBaseUrl('/img/logo-mark.svg');
   return (
     <header className={styles.hero}>
       <div className="container">
         <img
-          src="/img/logo-mark.svg"
+          src={logoUrl}
           alt="KnightLoad Signal Diamond"
           className={styles.heroLogo}
         />
