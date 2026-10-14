@@ -21,7 +21,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write        # sbom-action attaches the image SBOM to the tag's GitHub Release
   packages: write        # push to GHCR
   security-events: read  # Trivy table output (no code-scanning upload required)
 
