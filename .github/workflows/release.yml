@@ -69,16 +69,20 @@ jobs:
       - name: Build one-file binary
         shell: bash
         run: |
-          SCRIPTS=skills/workload-model/scripts
+          # Package the maintained `engine/` CLI — the one the docs describe and
+          # that carries the `init` + `guided` subcommands and the current
+          # `archetypes` extract schema. (The legacy `skills/workload-model/scripts/`
+          # engine predates both; building it is what left v0.1.0 without `guided`
+          # and KeyError'ing on the current CrewAI example.)
           python -m PyInstaller --noconfirm --onefile --clean \
             --name "$BINARY_NAME" \
-            --paths "$SCRIPTS" \
-            --add-data "$SCRIPTS/schema.json${{ matrix.data_sep }}." \
-            --add-data "skills/workload-model/fixtures/example_extract.json${{ matrix.data_sep }}." \
+            --paths engine \
+            --add-data "engine/schema.json${{ matrix.data_sep }}." \
             --hidden-import shaping --hidden-import archetypes \
             --hidden-import clustering --hidden-import emit \
-            --hidden-import g0_gate --hidden-import build_example --hidden-import source_merge \
-            "$SCRIPTS/cli.py"
+            --hidden-import g0_gate --hidden-import source_merge \
+            --hidden-import driver \
+            engine/cli.py
 
       - name: Smoke test the binary
         shell: bash
@@ -86,14 +90,15 @@ jobs:
           BIN="dist/$BINARY_NAME"
           [ "${{ matrix.target }}" = "windows-amd64" ] && BIN="dist/$BINARY_NAME.exe"
           "$BIN" --help
-          # commerce: bundled default fixture
-          "$BIN" --out out_smoke
-          test -f out_smoke/workload-model.json
-          test -f out_smoke/scenario-proposal.md
-          # agentic: bundled synthetic agentic extract
-          "$BIN" --extract skills/workload-model/fixtures/example_agentic_extract.json \
+          # agentic: the current CrewAI example (the extract v0.1.0 KeyError'd on)
+          "$BIN" --extract examples/crewai-deepseek-agent/extract.json \
                  --out out_agentic --mode agentic
           test -f out_agentic/workload-model.json
+          test -f out_agentic/scenario-proposal.md
+          # the guided 4-step driver is packaged (init + guided subcommands)
+          "$BIN" guided --extract examples/crewai-deepseek-agent/extract.json \
+                 --out out_guided --mode agentic --yes
+          test -f out_guided/guided-state.json
 
       - name: Stage release asset
         id: stage
