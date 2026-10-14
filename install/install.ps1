@@ -39,7 +39,7 @@ New-Item -ItemType Directory -Force -Path $tmp | Out-Null
 
 Invoke-WebRequest -Uri "$Base/SHA256SUMS"                -OutFile (Join-Path $tmp 'SHA256SUMS')
 Invoke-WebRequest -Uri "$Base/$Engine-$Platform.exe"     -OutFile (Join-Path $tmp "$Engine-$Platform.exe")
-Invoke-WebRequest -Uri "$Base/$Engine-skills-$Ver.zip"   -OutFile (Join-Path $tmp 'skills.zip')
+Invoke-WebRequest -Uri "$Base/$Engine-skills-$Ver.zip"   -OutFile (Join-Path $tmp "$Engine-skills-$Ver.zip")
 
 # verify before executing anything
 $sums = Get-Content (Join-Path $tmp 'SHA256SUMS')
@@ -57,7 +57,7 @@ Copy-Item (Join-Path $tmp "$Engine-$Platform.exe") $bin -Force
 
 $skillsDir = Join-Path $InstallDir 'skills'
 if (Test-Path $skillsDir) { Remove-Item $skillsDir -Recurse -Force }
-Expand-Archive -Path (Join-Path $tmp 'skills.zip') -DestinationPath $skillsDir -Force
+Expand-Archive -Path (Join-Path $tmp "$Engine-skills-$Ver.zip") -DestinationPath $skillsDir -Force
 # the zip has a single top-level dir; flatten so $skillsDir\workload-model\SKILL.md exists
 $inner = Get-ChildItem $skillsDir | Where-Object { $_.PSIsContainer } | Select-Object -First 1
 if ($inner) {

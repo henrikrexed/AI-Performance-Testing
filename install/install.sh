@@ -52,7 +52,7 @@ echo "==> $ENGINE $VERSION ($PLATFORM) -> $DIR"
 
 curl -fsSL -o "$TMP/SHA256SUMS"                "$BASE/SHA256SUMS"
 curl -fsSL -o "$TMP/$ENGINE-$PLATFORM"         "$BASE/$ENGINE-$PLATFORM"
-curl -fsSL -o "$TMP/skills.tar.gz"             "$BASE/$ENGINE-skills-$VER.tar.gz"
+curl -fsSL -o "$TMP/$ENGINE-skills-$VER.tar.gz" "$BASE/$ENGINE-skills-$VER.tar.gz"
 
 # verify before executing anything
 (cd "$TMP" && grep -E " ($ENGINE-$PLATFORM|$ENGINE-skills-$VER\.tar\.gz)$" SHA256SUMS | $SHA -c -)
@@ -67,7 +67,7 @@ chmod +x "$BIN"
 rm -rf "$DIR/skills" "$DIR/docs"
 BUNDLE="$TMP/unpack"
 mkdir -p "$BUNDLE"
-tar xzf "$TMP/skills.tar.gz" -C "$BUNDLE"
+tar xzf "$TMP/$ENGINE-skills-$VER.tar.gz" -C "$BUNDLE"
 mv "$BUNDLE"/*/skills "$DIR/skills"
 [ -d "$BUNDLE"/*/docs ] && mv "$BUNDLE"/*/docs "$DIR/docs"
 
