@@ -7,7 +7,8 @@ name: release
 # pure-Python 3.12 with `jsonschema` as its only runtime dependency, so a one-file
 # bundle is clean and needs no native toolchain). Each binary gets a CycloneDX SBOM.
 #
-# The Release also carries the installable distribution (ISI-5932 / WS-E):
+# The Release also carries the installable distribution (release-pipeline
+# completion workstream):
 #   * `workload-engine-skills-<ver>.tar.gz|zip` — the skills/ tree + core usage
 #     docs, so `workload-engine init --from <dir>` works from assets alone,
 #     with no repo clone;
