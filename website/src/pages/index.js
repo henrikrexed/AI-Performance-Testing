@@ -45,6 +45,11 @@ function Hero() {
   return (
     <header className={styles.hero}>
       <div className="container">
+        <img
+          src="/img/logo-mark.svg"
+          alt="KnightLoad Signal Diamond"
+          className={styles.heroLogo}
+        />
         <p className={styles.eyebrow}>Observability-driven load testing</p>
         <h1 className={styles.heroTitle}>
           Your telemetry already knows what your real workload looks like.
