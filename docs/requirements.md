@@ -4,6 +4,11 @@ The engine and the renderer skills are deliberately dependency-light (see
 [`engine.md`](engine.md) and [`skills-install.md`](skills-install.md)). This page covers
 the **backend access** and **agent tooling** they sit on top of.
 
+> **New here?** Start with the two-command quickstart in
+> [`skills-install.md`](skills-install.md#quickstart--two-commands) — it installs the
+> skills and runs the whole loop on a bundled synthetic example with no tokens. You only
+> need the backend access below once you point the loop at your own tenant.
+
 A `.env.example` at the repo root lists every variable; copy it to `.env` and fill it in.
 **Never commit a real `.env`.**
 

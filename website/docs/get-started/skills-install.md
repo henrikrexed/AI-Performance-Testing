@@ -20,6 +20,54 @@ Skills in this repo:
 | `baseline-diff` | ANALYZE | DQL shape-diff vs. baseline, accept / iterate / escalate |
 | `rum-sessions` · `session-stitch` | SCOPE (RUM) | RUM session shape & ordered-action reconstruction |
 
+> **Which renderers ship today:** `k6-synthesis` is bundled and wired end-to-end (the
+> guided flow generates a runnable k6 project headlessly). `jmeter`/`locust`/`gatling`
+> follow the same one-interface `renderer-kit` contract; install their synthesis skills
+> the same way and the guided flow hands them the approved model. Pick your renderer in
+> the guided flow's step 2.
+
+## Quickstart — two commands
+
+No manual symlinking. One command installs the skills into your coding agent; the second
+is the first prompt that starts the guided loop.
+
+```bash
+# 1 — fetch the repo and install the skills into ~/.claude/skills (verifies them)
+curl -fsSL https://raw.githubusercontent.com/henrikrexed/AI-Performance-Testing/main/install.sh | sh
+```
+
+`install.sh` clones the repo (or downloads a tarball when `git` is absent) and runs
+`engine/cli.py init`, which copies every bundled skill into your agent's skills directory
+and verifies each one loads. The default destination is `~/.claude/skills` (the Claude
+Code user-wide path); override with `--dest` or `AIPT_DEST`. From an existing checkout the
+no-curl equivalent is:
+
+```bash
+git clone https://github.com/henrikrexed/AI-Performance-Testing.git
+cd AI-Performance-Testing
+python3 engine/cli.py init                       # -> ~/.claude/skills, then verifies
+python3 engine/cli.py init --dest .agents/skills # cross-client location instead
+```
+
+`init` prints the exact next command. The second command of the quickstart is that
+prompt — start the guided 4-step flow (see [`engine.md`](./engine.md) §3):
+
+```bash
+# 2 — drive the gated loop on the bundled synthetic example (no backend needed)
+python3 engine/cli.py guided \
+    --extract examples/crewai-deepseek-agent/extract.json \
+    --out ./out --mode agentic
+```
+
+…or, with an agent that now has the skills, just ask in plain language:
+
+> "Use the workload-model skill to build a model from the example extract."
+
+That is the whole onboarding. The manual per-agent copy steps below remain for CI, locked-
+down boxes, or agents whose skills directory differs from the defaults.
+
+## Manual install (per agent)
+
 Each coding agent discovers skills from a conventional directory. Install = copy (or
 symlink) the skill directory there. Paths below follow the same standard the Dynatrace
 CLI uses (`dtctl skills install --list`).

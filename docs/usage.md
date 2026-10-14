@@ -4,17 +4,22 @@ End-to-end: from a telemetry window to an accepted load test. For the method beh
 step see [`methodology.md`](methodology.md); for the engine specifically see
 [`engine.md`](engine.md).
 
-## 0. Install
-
-- **Engine** — a released binary or the Docker image, or run from source:
-  [`engine.md`](engine.md) §1.
-- **Skills** — into your coding agent: [`skills-install.md`](skills-install.md).
-- **Backend access** — Dynatrace tokens/scopes + `dtctl`:
-  [`requirements.md`](requirements.md).
+## 0. Install — two commands
 
 ```bash
-git clone https://github.com/henrikrexed/AI-Performance-Testing.git
-cd AI-Performance-Testing
+# 1 — install the skills into your coding agent (fetch + verify)
+curl -fsSL https://raw.githubusercontent.com/henrikrexed/AI-Performance-Testing/main/install.sh | sh
+# 2 — start the guided loop (init prints this exact command)
+python3 engine/cli.py guided \
+    --extract examples/crewai-deepseek-agent/extract.json --out ./out --mode agentic
+```
+
+That is the whole onboarding — details and the no-curl equivalent (`python3 engine/cli.py
+init`) are in [`skills-install.md`](skills-install.md). For backend runs you also need
+Dynatrace tokens/scopes + `dtctl` ([`requirements.md`](requirements.md)); the released
+binary / Docker image paths are in [`engine.md`](engine.md) §1.
+
+```bash
 cp .env.example .env     # fill in DT_ENDPOINT, DT_API_TOKEN (+ OTLP token if exporting)
 ```
 
@@ -37,8 +42,11 @@ produces.
 
 ## 2. Run the loop against your own backend
 
-With a coding agent that has the skills installed and `DT_ENDPOINT` / `DT_API_TOKEN`
-pointed at your tenant, ask for the loop in plain language:
+This is the same gated 4-step flow the `engine/cli.py guided` command runs
+([`engine.md`](engine.md) §3: **propose + confirm → choose output → generate → opt-in
+try**), driven by a coding agent against a live backend instead of the bundled extract.
+With an agent that has the skills installed and `DT_ENDPOINT` / `DT_API_TOKEN` pointed at
+your tenant, ask for the loop in plain language:
 
 > "Scope a load test for service `checkout` over the last 3 hours."
 
