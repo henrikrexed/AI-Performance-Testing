@@ -86,24 +86,38 @@ flowchart TB
 The honest shape: **the agent proposes, you confirm, the engine generates, the run is
 opt-in.** Nothing executes against any environment until you say so.
 
-## Install — two commands
+## Install
 
-Get the tool, run `init`, done — then talk to your agent. No manual symlinking of skills.
+Three paths. Fastest is the **released engine** — a standalone binary or a container, no
+Python toolchain. To drive the loop from your coding agent, install the **skills**. To
+hack on the code, use **source**.
+
+**Released engine** — pinned [`v0.1.0`](https://github.com/henrikrexed/AI-Performance-Testing/releases/tag/v0.1.0)
+(track [`latest`](https://github.com/henrikrexed/AI-Performance-Testing/releases/latest)).
+Each binary ships a CycloneDX SBOM alongside it:
 
 ```sh
-# 1 — get the tool (engine + skills)
-curl -fsSL https://henrikrexed.github.io/AI-Performance-Testing/install.sh | sh
+# Docker (multi-arch: amd64 + arm64)
+docker pull ghcr.io/henrikrexed/ai-performance-testing:v0.1.0   # or :latest
 
-# 2 — install the skills into your coding agent, verify, and print the next prompt
-knightload init
+# ...or the binary for your platform (linux-amd64/arm64 · darwin-arm64 · windows-amd64.exe)
+VERSION=v0.1.0
+curl -fsSL -o workload-engine \
+  "https://github.com/henrikrexed/AI-Performance-Testing/releases/download/${VERSION}/workload-engine-linux-amd64"
+chmod +x workload-engine && ./workload-engine --help
 ```
 
-> **Rolling out:** the one-line installer and the `init` command ship with the engine's
-> onboarding work that is landing now. **On today's [`v0.1.0`](https://github.com/henrikrexed/AI-Performance-Testing/releases) release,** grab the
-> `workload-engine` binary (linux / macOS / windows) or the multi-arch image
-> `ghcr.io/henrikrexed/ai-performance-testing`, or `git clone` for source — then install
-> the skills per [`docs/skills-install.md`](docs/skills-install.md). All engine paths are
-> in [`docs/engine.md`](docs/engine.md).
+macOS / Windows / Kubernetes paths are in [`docs/engine.md`](docs/engine.md).
+
+**Skills into your coding agent** — one command fetches the repo, installs the skills
+(default `~/.claude/skills`), verifies them, and prints the first prompt:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/henrikrexed/AI-Performance-Testing/main/install.sh | sh
+```
+
+**From source** — `git clone` the repo (see [Try it with no backend](#try-it-with-no-backend-10-minutes)
+below); full per-agent install in [`docs/skills-install.md`](docs/skills-install.md).
 
 ### Try it with no backend (~10 minutes)
 

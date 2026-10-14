@@ -49,7 +49,7 @@ workload-engine --help
 
 ```bash
 VERSION=v0.1.0
-# Apple Silicon: darwin-arm64 · Intel: darwin-amd64
+# Only an Apple-Silicon (arm64) binary ships. Intel Macs: run it under Rosetta 2, or use Docker.
 curl -fsSL -o workload-engine \
   "https://github.com/henrikrexed/AI-Performance-Testing/releases/download/${VERSION}/workload-engine-darwin-arm64"
 chmod +x workload-engine
@@ -74,7 +74,7 @@ Invoke-WebRequest `
 The image is published multi-arch (amd64 + arm64) to GHCR:
 
 ```bash
-docker pull ghcr.io/henrikrexed/ai-performance-testing:latest   # or :v0.1.0
+docker pull ghcr.io/henrikrexed/ai-performance-testing:v0.1.0   # or :latest
 # mount a working directory; extract.json goes in, results come out under ./out
 docker run --rm -v "$PWD":/work \
   ghcr.io/henrikrexed/ai-performance-testing:latest \
