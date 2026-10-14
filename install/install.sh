@@ -29,7 +29,7 @@ case "$(uname -s)/$(uname -m)" in
   Linux/x86_64)  PLATFORM="linux-amd64" ;;
   Linux/aarch64) PLATFORM="linux-arm64" ;;
   Darwin/arm64)  PLATFORM="darwin-arm64" ;;
-  Darwin/x86_64) PLATFORM="darwin-amd64" ;;
+  Darwin/x86_64) PLATFORM="darwin-arm64"; INTEL_ROSETTA=1 ;;
   *) echo "install.sh: unsupported platform $(uname -s)/$(uname -m)" >&2; exit 1 ;;
 esac
 
@@ -46,6 +46,8 @@ BASE="https://github.com/$REPO/releases/download/$VERSION"
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 
+[ -n "${INTEL_ROSETTA:-}" ] && \
+  echo "note: Intel Mac — no darwin-amd64 build exists; installing the arm64 binary (runs via Rosetta 2)."
 echo "==> $ENGINE $VERSION ($PLATFORM) -> $DIR"
 
 curl -fsSL -o "$TMP/SHA256SUMS"                "$BASE/SHA256SUMS"
@@ -60,9 +62,14 @@ mkdir -p "$DIR/bin"
 mv "$TMP/$ENGINE-$PLATFORM" "$BIN"
 chmod +x "$BIN"
 
-rm -rf "$DIR/skills"
-mkdir -p "$DIR/skills"
-tar xzf "$TMP/skills.tar.gz" -C "$DIR/skills" --strip-components=1
+# unpack: <bundle>/{skills,docs,README.md} -> $DIR/skills (the skills dir itself)
+# and $DIR/docs; `init --from` requires workload-model/SKILL.md directly inside.
+rm -rf "$DIR/skills" "$DIR/docs"
+BUNDLE="$TMP/unpack"
+mkdir -p "$BUNDLE"
+tar xzf "$TMP/skills.tar.gz" -C "$BUNDLE"
+mv "$BUNDLE"/*/skills "$DIR/skills"
+[ -d "$BUNDLE"/*/docs ] && mv "$BUNDLE"/*/docs "$DIR/docs"
 
 echo "==> installing skills into your coding agent ($ENGINE init)"
 INIT_ARGS="--from $DIR/skills"

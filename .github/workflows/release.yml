@@ -43,10 +43,11 @@ jobs:
   # 1. Cross-platform binaries. PyInstaller cannot cross-compile, so each target
   #    is built on a native runner (linux arm64 uses the GA `ubuntu-24.04-arm`
   #    runner — no QEMU emulation, which is slow and flaky for PyInstaller).
-  #    darwin-amd64 (macos-13 / Intel Mac) is included but non-gating: macos-13
-  #    runners are chronically scarce on GitHub-hosted infra, and the release
-  #    job publishes whatever legs actually succeeded (`fail-fast: false` +
-  #    per-leg artifacts), so a queued-out Intel leg can never block a Release.
+  #    darwin-amd64 (Intel Mac) is not built: GitHub-hosted Intel macOS runners
+  #    no longer exist (verified: the macos-13 matrix leg sat queued with no
+  #    runner while every other leg went green). Intel Macs install the
+  #    darwin-arm64 binary via Rosetta 2 — the installers map them
+  #    automatically and the release notes say so.
   # ---------------------------------------------------------------------------
   binaries:
     name: binary (${{ matrix.target }})
@@ -63,9 +64,6 @@ jobs:
             data_sep: ":"
           - os: macos-latest
             target: darwin-arm64
-            data_sep: ":"
-          - os: macos-13
-            target: darwin-amd64
             data_sep: ":"
           - os: windows-latest
             target: windows-amd64
@@ -159,6 +157,7 @@ jobs:
         run: |
           set -eu
           VERSION="${GITHUB_REF_NAME#v}"          # tag -> 0.1.5; dispatch -> branch name
+          VERSION="${VERSION//\//-}"              # dispatch branch refs contain '/'; asset names must not
           ROOT="knightload-skills-${VERSION}"
           STAGE="$(mktemp -d)"
           mkdir -p "$STAGE/$ROOT"
@@ -260,9 +259,8 @@ jobs:
             ```
 
             **Binaries** (attached, each with a CycloneDX SBOM): `linux-amd64`,
-            `linux-arm64`, `darwin-arm64` (Apple Silicon), `darwin-amd64` (Intel,
-            best-effort — published whenever the runner leg succeeds),
-            `windows-amd64`.
+            `linux-arm64`, `darwin-arm64`, `windows-amd64`. Intel Macs: the
+            installer fetches the `darwin-arm64` binary, which runs via Rosetta 2.
 
             **Skills bundle**: `workload-engine-skills-${{ env.IMAGE_TAG }}.tar.gz|zip` —
             `skills/` + core docs; install into your coding agent with
