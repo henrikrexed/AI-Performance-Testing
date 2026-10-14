@@ -74,12 +74,17 @@ Invoke-WebRequest `
 The image is published multi-arch (amd64 + arm64) to GHCR:
 
 ```bash
-docker pull ghcr.io/henrikrexed/ai-performance-testing:v0.1.0   # or :latest
+docker pull ghcr.io/henrikrexed/ai-performance-testing:0.1.0   # or :latest
 # mount a working directory; extract.json goes in, results come out under ./out
 docker run --rm -v "$PWD":/work \
   ghcr.io/henrikrexed/ai-performance-testing:latest \
   --extract /work/extract.json --out /work/out
 ```
+
+> **Image tag vs. release tag.** The container is published as `:0.1.0` / `:0.1` /
+> `:latest` — semver tags carry **no** leading `v`. The GitHub **release** that ships the
+> binaries is tagged `v0.1.0` (with the `v`); that's the string in the binary download
+> URLs above.
 
 ### Kubernetes
 
@@ -99,7 +104,7 @@ spec:
       restartPolicy: Never
       containers:
         - name: engine
-          image: ghcr.io/henrikrexed/ai-performance-testing:v0.1.0
+          image: ghcr.io/henrikrexed/ai-performance-testing:0.1.0
           args: ["--extract", "/work/extract.json", "--out", "/work/out"]
           volumeMounts:
             - { name: extract, mountPath: /work/extract.json, subPath: extract.json }

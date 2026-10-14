@@ -33,8 +33,13 @@ always track the newest.
 **Docker:**
 
 ```sh
-docker pull ghcr.io/henrikrexed/ai-performance-testing:v0.1.0   # or :latest
+docker pull ghcr.io/henrikrexed/ai-performance-testing:0.1.0   # or :latest
 ```
+
+:::note
+The **image** tag is `0.1.0` (no `v`); the GitHub **release** that ships the binaries is
+tagged `v0.1.0`.
+:::
 
 **Binary** — download the one for your platform from the
 [latest release](https://github.com/henrikrexed/AI-Performance-Testing/releases/latest).

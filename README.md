@@ -98,7 +98,7 @@ Each binary ships a CycloneDX SBOM alongside it:
 
 ```sh
 # Docker (multi-arch: amd64 + arm64)
-docker pull ghcr.io/henrikrexed/ai-performance-testing:v0.1.0   # or :latest
+docker pull ghcr.io/henrikrexed/ai-performance-testing:0.1.0   # or :latest
 
 # ...or the binary for your platform (linux-amd64/arm64 · darwin-arm64 · windows-amd64.exe)
 VERSION=v0.1.0
@@ -107,7 +107,8 @@ curl -fsSL -o workload-engine \
 chmod +x workload-engine && ./workload-engine --help
 ```
 
-macOS / Windows / Kubernetes paths are in [`docs/engine.md`](docs/engine.md).
+> The **image** tag is `0.1.0` (no `v`); the **release** that ships the binaries is tagged
+> `v0.1.0`. macOS / Windows / Kubernetes paths are in [`docs/engine.md`](docs/engine.md).
 
 **Skills into your coding agent** — one command fetches the repo, installs the skills
 (default `~/.claude/skills`), verifies them, and prints the first prompt:
