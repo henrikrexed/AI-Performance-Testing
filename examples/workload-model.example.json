@@ -45,7 +45,7 @@
       },
       "provenance": {
         "kind": "demo-sample",
-        "note": "SYNTHETIC EXAMPLE \u2014 numbers are representative, not extracted from any real tenant (examples/ README). Renderers refuse demo-sample models unless explicitly opted in (--demo / WORKLOAD_MODEL_ALLOW_DEMO=1, )."
+        "note": "SYNTHETIC EXAMPLE \u2014 numbers are representative, not extracted from any real tenant (examples/ README). Renderers refuse demo-sample models unless explicitly opted in (--demo / WORKLOAD_MODEL_ALLOW_DEMO=1)."
       }
     }
   },
