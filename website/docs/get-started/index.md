@@ -6,6 +6,8 @@ description: Install the released engine (binary or Docker), the skills, or run 
 slug: /get-started
 ---
 
+import DemoClip from '@site/src/components/DemoClip';
+
 # Get started
 
 First get the tool, then walk the loop. Start with the no-backend example to see what each
@@ -92,6 +94,8 @@ From a source checkout:
 (cd skills/k6-synthesis \
   && node bin/synthesize.mjs ../../examples/workload-model.example.json /tmp/example-out)
 ```
+
+<DemoClip name="utility" aspect="800 / 508" caption="Steps 1–2 in action: SCOPE drafts the workload profile, the V1 gate confirms it, and SYNTHESIZE emits the runnable k6 script." />
 
 Read the proposal, then look at what SYNTHESIZE generated. The example artifacts under
 [`examples/`](https://github.com/henrikrexed/AI-Performance-Testing/tree/main/examples)

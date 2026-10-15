@@ -6,6 +6,8 @@ description: KnightLoad is a five-stage loop with one owner and one gate per sta
 slug: /how-it-works
 ---
 
+import DemoClip from '@site/src/components/DemoClip';
+
 # How it works
 
 KnightLoad is a five-stage loop. Each stage has one owner and one gate, so you always know
@@ -20,6 +22,8 @@ flowchart LR
     classDef gate fill:#16213e,stroke:#2ee6d6,color:#e7ebf0;
     class VALIDATE gate;
 ```
+
+<DemoClip name="utility" aspect="800 / 508" caption="The loop in practice: the agent scopes the load-testing profile from your AI assets, you confirm (V1), and the k6 / JMeter scripts are generated." />
 
 | Stage | Owner | Input → Output | Gate |
 |---|---|---|---|

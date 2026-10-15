@@ -24,6 +24,13 @@ const config = {
 
   onBrokenLinks: 'warn',
 
+  // Demo-clip embed gate. Live: the converted assets ship in
+  // static/demo/ (approved 27s highlight of the agent-driven loop; see
+  // src/components/DemoClip/ASSETS.md for the spec and provenance).
+  customFields: {
+    demoAssetsReady: true,
+  },
+
   i18n: {
     defaultLocale: 'en',
     locales: ['en'],

@@ -5,6 +5,7 @@ import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import Layout from '@theme/Layout';
 import Mermaid from '@theme/Mermaid';
+import DemoClip from '@site/src/components/DemoClip';
 import styles from './index.module.css';
 
 // Landing-page sections. The loop diagram mirrors docs/how-it-works and the
@@ -76,6 +77,12 @@ function Hero() {
             Read the methodology
           </Link>
         </div>
+        <DemoClip
+          name="hero-loop"
+          priority
+          aspect="800 / 508"
+          caption="Claude driving the KnightLoad loop end to end — SCOPE through ANALYZE, with the V1 human gate."
+        />
       </div>
     </header>
   );
