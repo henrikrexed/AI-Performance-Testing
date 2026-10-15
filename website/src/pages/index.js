@@ -183,9 +183,9 @@ function ClosingCta() {
       <div className="container">
         <h2>Ready to load from reality?</h2>
         <p>
-          Clone the repo and run the first half of the loop on a bundled example in about
-          ten minutes — no backend, no tokens. When you’re ready, point it at your own
-          Dynatrace trial and run the full loop end to end.
+          Install in one command and run the first half of the loop on a bundled
+          example in about ten minutes — no backend, no tokens, no clone. When you’re
+          ready, point it at your own Dynatrace trial and run the full loop end to end.
         </p>
         <div className={styles.heroButtons}>
           <Link className="button button--primary button--lg" to="/docs/get-started">
