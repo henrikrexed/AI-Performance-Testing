@@ -195,7 +195,7 @@
             },
             "provenance": {
               "type": "object",
-              "description": "Data provenance (ISI-5928). Fail-closed: G0 refuses models without it. kind=extracted => the numbers came from live backend queries against the named tenant/window; kind=demo-sample => synthetic/demo data, consumers must explicitly opt in (--demo / WORKLOAD_MODEL_ALLOW_DEMO=1).",
+              "description": "Data provenance . Fail-closed: G0 refuses models without it. kind=extracted => the numbers came from live backend queries against the named tenant/window; kind=demo-sample => synthetic/demo data, consumers must explicitly opt in (--demo / WORKLOAD_MODEL_ALLOW_DEMO=1).",
               "required": [
                 "kind"
               ],

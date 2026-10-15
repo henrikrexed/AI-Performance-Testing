@@ -1,4 +1,4 @@
-"""Fail-closed environment probe (ISI-5928) — run BEFORE any extraction.
+"""Fail-closed environment probe  — run BEFORE any extraction.
 
 The workload-model skill must extract from the user's REAL telemetry or stop. This probe
 checks, in order:
@@ -103,7 +103,7 @@ def main() -> int:
     # --- 3. target service observed in the window ------------------------------
     wsec = _parse_window_seconds(a.window)
     fr = f"from:now()-{a.window}"
-    # G1-C two-stage form (validated on tenant wkf10640, SKILL.md): earliest-start root span
+    # G1-C two-stage form (validated on a real tenant, SKILL.md): earliest-start root span
     # per trace, then count traces per entry service.
     disc = _query(
         a.context,

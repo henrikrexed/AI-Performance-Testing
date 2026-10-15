@@ -1,4 +1,4 @@
-// Demo-data quarantine guard (ISI-5928): a provenance.kind="demo-sample" model is
+// Demo-data quarantine guard : a provenance.kind="demo-sample" model is
 // refused by synthesize()/render() unless the operator explicitly opts in
 // (--demo -> allowDemo, or WORKLOAD_MODEL_ALLOW_DEMO=1). Legacy models with no
 // provenance warn instead of failing (back-compat).
@@ -26,12 +26,12 @@ function demoModel() {
 
 test('demo-sample model is refused by synthesize() without opt-in', () => {
   const m = demoModel();
-  assert.throws(() => synthesize(m, '/tmp/never-written'), /demo guard \(ISI-5928\)/);
+  assert.throws(() => synthesize(m, '/tmp/never-written'), /demo guard/);
 });
 
 test('demo-sample model is refused by the renderer without opt-in', () => {
   const m = demoModel();
-  assert.throws(() => k6Renderer.render(m), /demo guard \(ISI-5928\)/);
+  assert.throws(() => k6Renderer.render(m), /demo guard/);
 });
 
 test('explicit allowDemo opt-in unblocks synthesize()', () => {

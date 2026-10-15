@@ -152,7 +152,7 @@ def evaluate_g0(
     g.add("caps", bool(caps.get("maxRps") or caps.get("maxVus")) and bool(caps.get("maxDuration")),
           f"caps declared: {caps}")
 
-    # 10. all DQL run live — honest per provenance kind (ISI-5928): a demo-sample model
+    # 10. all DQL run live — honest per provenance kind : a demo-sample model
     #     makes NO live-DQL claim (n/a, not a silent pass); an extracted model must be
     #     attested live by the operator/adapter.
     prov = source.get("provenance") or {}
@@ -177,7 +177,7 @@ def evaluate_g0(
           "every journey carries an evidenceSource tag"
           if tag_ok else "journey missing evidenceSource (span/accesslog/both)")
 
-    # 13. provenance (ISI-5928) — fail-closed: every model declares where its numbers came from
+    # 13. provenance  — fail-closed: every model declares where its numbers came from
     if prov_kind == "extracted":
         p_ok = bool(prov.get("extractedFrom")) and bool(prov.get("tenant")) and bool(prov.get("window"))
         g.add("provenance", p_ok,
@@ -188,7 +188,7 @@ def evaluate_g0(
               "demo-sample — synthetic/demo data; consumers must explicitly opt in (--demo)")
     else:
         g.add("provenance", False,
-              "no provenance — fail-closed (ISI-5928): rebuild via workload-engine with a real "
+              "no provenance — fail-closed : rebuild via workload-engine with a real "
               "extract (the adapter records provenance) or pass --demo for the synthetic example")
 
     return g
@@ -227,7 +227,7 @@ if __name__ == "__main__":  # CLI: python g0_gate.py <model.json> [proposal.md] 
     model_path = Path(args[0])
     prop = Path(args[1]).read_text() if len(args) > 1 else ""
     model = json.loads(model_path.read_text())
-    # dql_run_live derives from the model's own provenance, not a hardcoded True (ISI-5928):
+    # dql_run_live derives from the model's own provenance, not a hardcoded True :
     # the gate never claims live DQL the model cannot show. --attest-live lets the operator
     # assert it explicitly for extracted models whose adapter predates provenance.dqlRunLive.
     prov = model.get("metadata", {}).get("source", {}).get("provenance") or {}

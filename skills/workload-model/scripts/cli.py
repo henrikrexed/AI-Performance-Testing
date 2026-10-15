@@ -8,7 +8,7 @@ Input: a **neutral telemetry extract** (JSON) produced by a backend adapter (the
 query pack in SKILL.md, or any other backend). Output: `<dir>/workload-model.json` +
 `<dir>/scenario-proposal.md`, self-validated by the G0 gate. Exit 0 iff G0 passes.
 
-Real-scan integrity (ISI-5928) — fail-closed contract:
+Real-scan integrity  — fail-closed contract:
   - `--extract` has NO default. Running without it and without `--demo` exits 2 with
     guidance (never a silent synthetic fallback).
   - `--demo` is the explicit opt-in for the bundled synthetic fixture; its output is
@@ -45,7 +45,7 @@ from g0_gate import evaluate_g0                                # noqa: E402
 
 
 FAIL_CLOSED_MSG = (
-    "no telemetry extract provided. The engine is fail-closed (ISI-5928): it will NOT\n"
+    "no telemetry extract provided. The engine is fail-closed : it will NOT\n"
     "silently fall back to the bundled synthetic example.\n"
     "  - Real run:   run scripts/env_probe.py --context <ctx> [--service <svc>], run the\n"
     "                SKILL.md DQL pack, record the probe's provenanceTemplate into your\n"
@@ -166,7 +166,7 @@ def run(extract: dict, out_dir: Path, mode: str) -> int:
     (out_dir / "workload-model.json").write_text(json.dumps(model, indent=2) + "\n", encoding="utf-8")
     (out_dir / "scenario-proposal.md").write_text(proposal, encoding="utf-8")
 
-    # dql_run_live is derived from the model's own provenance (ISI-5928), never hardcoded:
+    # dql_run_live is derived from the model's own provenance , never hardcoded:
     # extracted models attest live DQL via provenance.dqlRunLive; demo-sample models make
     # no live claim (the gate records n/a, not a silent pass).
     prov = model.get("metadata", {}).get("source", {}).get("provenance") or {}
@@ -200,7 +200,7 @@ def main(argv=None) -> int:
         extract_path = a.extract
 
     extract = json.loads(extract_path.read_text(encoding="utf-8"))
-    # Provenance precedence (ISI-5928): the extract's own provenance wins; --demo stamps a
+    # Provenance precedence : the extract's own provenance wins; --demo stamps a
     # demo-sample only when the caller provided none (e.g. the bundled synthetic fixture).
     if extract.get("provenance") is None and a.demo:
         extract["provenance"] = make_demo_provenance(

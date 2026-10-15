@@ -1,4 +1,4 @@
-"""env_probe.py tests (ISI-5928) — the fail-closed environment probe.
+"""env_probe.py tests  — the fail-closed environment probe.
 
 Uses a fake `dtctl` shim on PATH to exercise every branch: missing binary, broken
 auth, service discovery (unpinned), unknown service, and the happy path that emits

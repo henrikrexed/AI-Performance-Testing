@@ -42,7 +42,7 @@ def test_real_artifact_passes_g0():
 
 
 def test_provenance_required_fail_closed():
-    # ISI-5928: a model with no provenance must fail G0 — no "unknown-but-shipped" kind.
+    # a model with no provenance must fail G0 — no "unknown-but-shipped" kind.
     m = copy.deepcopy(_model())
     m["metadata"]["source"].pop("provenance", None)
     g = g0.evaluate_g0(m, dql_run_live=True, proposal_text=_proposal())
@@ -135,7 +135,7 @@ def test_blocks_on_cacheprofile_missing_keycardinality():
 
 
 def test_blocks_when_dql_not_run_live():
-    # ISI-5928: dql-live only applies to EXTRACTED models — an extracted model not
+    # dql-live only applies to EXTRACTED models — an extracted model not
     # attested live must block. (The example artifact is demo-stamped: n/a, see
     # test_demo_sample_dql_live_is_na_not_a_silent_pass.)
     m = copy.deepcopy(_model())

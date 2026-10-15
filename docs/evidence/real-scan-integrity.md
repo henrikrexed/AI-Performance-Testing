@@ -1,6 +1,6 @@
-# ISI-5928 (WS-C) — Real-scan integrity: E2E repro, fix, and JMeter stock-validity evidence
+#  (WS-C) — Real-scan integrity: E2E repro, fix, and JMeter stock-validity evidence
 
-Date: 2026-10-15 · Branch: `isi-5928/wsc-model-integrity` (off `canonical/main` @ `12f432c`) · Parent plan: [ISI-5734](/ISI/issues/ISI-5734) rev-6 WS-C.
+Date: 2026-10-15 · Branch: `isi-5928/wsc-model-integrity` (off `canonical/main` @ `12f432c`) · Parent plan: [](/ISI/issues/) rev-6 WS-C.
 
 ## 1. E2E repro — silent example fallback CONFIRMED (before the fix)
 
@@ -39,14 +39,14 @@ This is exactly the silent-example-fallback reported by Henrik, reproduced deter
 
 - `workload-engine --out X` → **exit 2**, guidance printed (env_probe → real run; `--demo` → demo run), **no files written**.
 - `workload-engine --demo --out X` → exit 0, G0 PASS 13/13, model stamped `demo-sample`, proposal carries the DEMO banner, gate output records `no live-DQL claim`.
-- `node bin/synthesize.mjs <demo-stamped model>` → refused: `demo guard (ISI-5928): … Demo data is never silently selectable as input…` (fires **before** the V1 gate). With `--demo` it proceeds.
+- `node bin/synthesize.mjs <demo-stamped model>` → refused: `demo guard: … Demo data is never silently selectable as input…` (fires **before** the V1 gate). With `--demo` it proceeds.
 - **Live probe against the real tenant** (`env -u XDG_CONFIG_HOME python3 scripts/env_probe.py --context tenant-b --service frontend --window 2h`): `ok: true`, `rootTraces: 183751`, provenance template emitted — the probe passes on a configured environment and fails closed (with `dtctl config set-context` guidance) on an unconfigured one.
 
 Tests: workload-model `pytest` **84 passed** (new: `test_env_probe.py`, `test_cli_provenance.py`, provenance cases in `test_g0_gate.py` / `test_schema_v11.py`); k6-synthesis `node --test` **56 passed** (new: `test/model.demo-guard.test.mjs`).
 
 ## 3. JMeter stock-validity evidence (gates WS-D)
 
-Re-rendered JMeter **from the REAL wkf10640 extraction** (`loadtests/wkf10640-astroshop-frontend/workload-model.json` — real DQL extraction on tenant wkf10640) via `skills/jmeter-synthesis` (isi-5844 checkout): renderer's own static gate passed (J1–J7). Then loaded with **stock JMeter 5.6.3** (`SaveService.loadTree`, JDK 17.0.20, parse-only — no test execution):
+Re-rendered JMeter **from the REAL tenant extraction** (`loadtests/the-astroshop-frontend/workload-model.json` — real DQL extraction on the validation tenant) via `skills/jmeter-synthesis` : renderer's own static gate passed (J1–J7). Then loaded with **stock JMeter 5.6.3** (`SaveService.loadTree`, JDK 17.0.20, parse-only — no test execution):
 
 ```
 LOAD_FAIL: CannotResolveClassException:
@@ -67,7 +67,7 @@ renderer depends on two non-stock BlazeMeter/jpgc plugin classes. **WS-D (JMeter
 fix) fires** — fix options: emit stock `ThreadGroup`/`SetupThreadGroup` +
 `PreciseThroughputTimer` (stock since 5.3), or make plugin use an explicit opt-in with the
 dependency declared and installed by preflight. Evidence artifacts uploaded to
-[ISI-5928](/ISI/issues/ISI-5928); loader + jar set reproducible via the commands above.
+[](/ISI/issues/); loader + jar set reproducible via the commands above.
 
 ## 4. Residual notes
 

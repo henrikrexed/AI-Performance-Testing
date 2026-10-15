@@ -173,6 +173,6 @@
   ],
   "provenance": {
     "kind": "demo-sample",
-    "note": "Worked example (sanitized demo of a real demo-tenant extraction): tenant anonymized to 'agent-demo' and fields normalized to the engine contract. Treat as demo data: consumers require explicit --demo opt-in (ISI-5928)."
+    "note": "Worked example (sanitized demo of a real demo-tenant extraction): tenant anonymized to 'agent-demo' and fields normalized to the engine contract. Treat as demo data: consumers require explicit --demo opt-in ."
   }
 }

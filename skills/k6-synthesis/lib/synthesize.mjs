@@ -79,7 +79,7 @@ export function buildArtifacts(model, { ttlSec } = {}) {
  */
 export function synthesize(modelPathOrObj, outDir, { ttlSec, allowDemo } = {}) {
   const model = loadModel(modelPathOrObj);
-  // ISI-5928 demo guard — BEFORE V1: demo data is refused even if a (hand-edited)
+  // demo guard — BEFORE V1: demo data is refused even if a (hand-edited)
   // approval block is present, unless the operator explicitly opted in.
   const { provenanceWarning } = assertNotDemo(model, { allowDemo });
   assertApproved(model); // V1 gate — refuse unapproved models

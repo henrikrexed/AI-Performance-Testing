@@ -44,7 +44,7 @@ function supports(model) {
  */
 function render(modelPathOrObj, opts = {}) {
   const model = loadModel(modelPathOrObj);
-  assertNotDemo(model, opts); // ISI-5928 demo guard — BEFORE V1: demo data refused without opt-in
+  assertNotDemo(model, opts); // demo guard — BEFORE V1: demo data refused without opt-in
   assertApproved(model); // V1 gate — k6 refuses unapproved models
   const { files, warnings } = buildArtifacts(model, opts);
   return { files, warnings };

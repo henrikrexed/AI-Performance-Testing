@@ -80,7 +80,7 @@ def test_g_p1_target_requires_into():
     assert len(errs) >= 1
 
 
-# --- ISI-5928: provenance block ------------------------------------------------------
+# --- provenance block ------------------------------------------------------
 
 def _model_with_provenance(prov):
     model = _pre_v11_model()

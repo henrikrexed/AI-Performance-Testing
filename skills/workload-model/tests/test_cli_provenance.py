@@ -1,4 +1,4 @@
-"""CLI fail-closed / demo opt-in / provenance threading tests (ISI-5928).
+"""CLI fail-closed / demo opt-in / provenance threading tests .
 
 The silent-example-fallback repro as a regression test: `workload-engine --out X` with no
 `--extract` and no `--demo` must exit 2 with guidance — never produce a model from the

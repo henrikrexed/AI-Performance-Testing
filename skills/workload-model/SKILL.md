@@ -33,7 +33,7 @@ the DQL and injects the rows — no telemetry I/O in the library.
 
 ## Workflow
 
-0. **Environment probe — MANDATORY, fail-closed (ISI-5928).** Before ANY extraction, run
+0. **Environment probe — MANDATORY, fail-closed .** Before ANY extraction, run
    `python3 scripts/env_probe.py --context <ctx> [--service <name>] [--window 3h]`. It
    verifies (a) `dtctl` is installed, (b) the DQL backend is reachable + authenticated for
    the context, (c) the target service is observed in the window (no `--service` → it
@@ -99,7 +99,7 @@ the DQL and injects the rows — no telemetry I/O in the library.
 artifacts in `out/example-frontend/`; run it to see the whole pipeline without a tenant).
 Its output is stamped `provenance.kind=demo-sample` like every demo artifact.
 
-## Demo data policy & provenance (ISI-5928)
+## Demo data policy & provenance 
 
 - **Every model carries `metadata.source.provenance`**: `kind=extracted` (with
   `extractedFrom: "<query pack> on tenant <Y> (<window>)"`, `queryPack`, `tenant`, `window`,
@@ -200,7 +200,7 @@ caps declared · all DQL run live (**honest per provenance**: extracted ⇒ atte
 `provenance.dqlRunLive`; demo-sample ⇒ `n/a`, no live claim) · **access-log availability
 `available`, OR `unavailable` with a spans-only caveat in the proposal** · every journey
 tagged `evidenceSource` (span/accesslog/both) · **provenance declared** (`extracted` with
-tenant/window/queryPack, or `demo-sample`) — fail-closed without it (ISI-5928).
+tenant/window/queryPack, or `demo-sample`) — fail-closed without it .
 
 Run: `python3 scripts/g0_gate.py <model.json> <proposal.md>` (exit 0 iff G0 passes;
 `dql_run_live` derives from the model's provenance — add `--attest-live` only if you,
@@ -221,7 +221,7 @@ the operator, personally attest the pack ran live on a pre-provenance extracted 
 - `scripts/shaping.py` — G3 pace / Little's Law / CoV ramp shaping
 - `scripts/emit.py` — model assembly + proposal rendering + canonical hash
 - `scripts/env_probe.py` — MANDATORY fail-closed environment probe (dtctl present · DQL
-  reachable/authenticated · target observed; prints the provenance template) — ISI-5928
+  reachable/authenticated · target observed; prints the provenance template) — 
 - `scripts/g0_gate.py` — G0 self-validation (schema + 13 exit criteria incl. provenance)
 - `scripts/rum_sessions.py` / `scripts/session_stitch.py` / `scripts/source_merge.py` —
   step 2c session signals (mirrored as standalone CLIs in `/utilities`)

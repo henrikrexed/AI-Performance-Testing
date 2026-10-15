@@ -8,7 +8,7 @@ status.hash with a sha256 over the canonicalized spec.
 
 No telemetry I/O here — the caller runs the DQL pack and passes the numbers in.
 
-Provenance (ISI-5928): every model carries `metadata.source.provenance` — either
+Provenance : every model carries `metadata.source.provenance` — either
 `extracted` (with `extractedFrom: "<query pack> on tenant <Y> (<window>)"`) or
 `demo-sample`. A model with no provenance fails G0 (fail-closed): there is no
 "unknown-but-shipped" kind. Demo models render with an unmissable banner and are
@@ -103,7 +103,7 @@ def build_model(
                 **({"sessionIdCoverage": session_id_coverage} if session_id_coverage is not None else {}),
                 "provenance": provenance if provenance is not None else {
                     "kind": "unknown",
-                    "note": "no provenance recorded by the caller — G0 fails closed (ISI-5928); "
+                    "note": "no provenance recorded by the caller — G0 fails closed ; "
                             "rerun the engine with a real extract (adapter records provenance) "
                             "or pass --demo for the synthetic example",
                 },
