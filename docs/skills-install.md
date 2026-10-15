@@ -21,36 +21,27 @@ Skills in this repo:
 > the same way and the guided flow hands them the approved model. Pick your renderer in
 > the guided flow's step 2.
 
-## Quickstart — two commands
+## Quickstart — one command, no clone
 
-No manual symlinking. One command installs the skills into your coding agent; the second
-is the first prompt that starts the guided loop.
-
-```bash
-# 1 — fetch the repo and install the skills into ~/.claude/skills (verifies them)
-curl -fsSL https://raw.githubusercontent.com/henrikrexed/AI-Performance-Testing/main/install.sh | sh
-```
-
-`install.sh` clones the repo (or downloads a tarball when `git` is absent) and runs
-`engine/cli.py init`, which copies every bundled skill into your agent's skills directory
-and verifies each one loads. The default destination is `~/.claude/skills` (the Claude
-Code user-wide path); override with `--dest` or `AIPT_DEST`. From an existing checkout the
-no-curl equivalent is:
+The release installer does everything: fetches the latest `workload-engine` binary +
+skills bundle (SHA256SUMS-verified), unpacks into `~/.knightload/`, installs the skills
+into your coding agent (`workload-engine init`, default `~/.claude/skills`), runs the
+install-time dependency pre-flight, and prints the quickstart. No git, no Python
+toolchain for the engine itself:
 
 ```bash
-git clone https://github.com/henrikrexed/AI-Performance-Testing.git
-cd AI-Performance-Testing
-python3 engine/cli.py init                       # -> ~/.claude/skills, then verifies
-python3 engine/cli.py init --dest .agents/skills # cross-client location instead
-```
+# 1 — install engine + skills (linux/macOS)
+curl -fsSL https://github.com/henrikrexed/AI-Performance-Testing/releases/latest/download/install.sh | sh
 
-`init` prints the exact next command. The second command of the quickstart is that
-prompt — start the guided 4-step flow (see [`engine.md`](engine.md) §3):
+#    Windows (PowerShell):
+#    irm https://github.com/henrikrexed/AI-Performance-Testing/releases/latest/download/install.ps1 | iex
+```
 
 ```bash
 # 2 — drive the gated loop on the bundled synthetic example (no backend needed)
-python3 engine/cli.py guided \
-    --extract examples/crewai-deepseek-agent/extract.json \
+curl -fsSL https://raw.githubusercontent.com/henrikrexed/AI-Performance-Testing/main/examples/crewai-deepseek-agent/extract.json -o extract.json
+~/.knightload/bin/workload-engine guided \
+    --extract extract.json \
     --out ./out --mode agentic
 ```
 
@@ -58,8 +49,22 @@ python3 engine/cli.py guided \
 
 > "Use the workload-model skill to build a model from the example extract."
 
-That is the whole onboarding. The manual per-agent copy steps below remain for CI, locked-
-down boxes, or agents whose skills directory differs from the defaults.
+That is the whole onboarding. `KNIGHTLOAD_VERSION` / `KNIGHTLOAD_DIR` / `KNIGHTLOAD_DEST`
+override the release, install dir, and skills destination. The manual paths below remain
+for contributors, CI, locked-down boxes, or agents whose skills directory differs from
+the defaults.
+
+## From a checkout (contributors)
+
+```bash
+git clone https://github.com/henrikrexed/AI-Performance-Testing.git
+cd AI-Performance-Testing
+python3 engine/cli.py init                       # -> ~/.claude/skills, then verifies
+python3 engine/cli.py init --dest .agents/skills # cross-client location instead
+sh skills/setup.sh                               # dependency pre-flight
+```
+
+`init` prints the exact next command.
 
 ## Manual install (per agent)
 

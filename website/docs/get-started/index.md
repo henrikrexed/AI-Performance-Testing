@@ -57,13 +57,14 @@ chmod +x workload-engine && ./workload-engine --help
 macOS (Apple Silicon), Windows, and a one-shot Kubernetes `Job` are all in
 [The engine](./engine.md) §1.
 
-### Install the skills into your coding agent
+### Install — engine + skills, one command
 
-One command fetches the repo and installs the skills into your agent (default
-`~/.claude/skills`), verifying each one:
+The release installer fetches the `workload-engine` binary + skills bundle for your
+platform (SHA256SUMS-verified, no clone), installs the skills into your agent (default
+`~/.claude/skills`), verifies them, and runs the dependency pre-flight:
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/henrikrexed/AI-Performance-Testing/main/install.sh | sh
+curl -fsSL https://github.com/henrikrexed/AI-Performance-Testing/releases/latest/download/install.sh | sh
 ```
 
 It prints the exact next command — the first prompt of the guided loop. Per-agent paths

@@ -7,17 +7,20 @@ step see [`methodology.md`](methodology.md); for the engine specifically see
 ## 0. Install — two commands
 
 ```bash
-# 1 — install the skills into your coding agent (fetch + verify)
-curl -fsSL https://raw.githubusercontent.com/henrikrexed/AI-Performance-Testing/main/install.sh | sh
-# 2 — start the guided loop (init prints this exact command)
-python3 engine/cli.py guided \
-    --extract examples/crewai-deepseek-agent/extract.json --out ./out --mode agentic
+# 1 — install engine + skills into your coding agent (fetch + checksum-verify, no clone)
+curl -fsSL https://github.com/henrikrexed/AI-Performance-Testing/releases/latest/download/install.sh | sh
+# 2 — start the guided loop (the installer prints this exact command)
+~/.knightload/bin/workload-engine guided \
+    --extract extract.json --out ./out --mode agentic
 ```
 
-That is the whole onboarding — details and the no-curl equivalent (`python3 engine/cli.py
-init`) are in [`skills-install.md`](skills-install.md). For backend runs you also need
-Dynatrace tokens/scopes + `dtctl` ([`requirements.md`](requirements.md)); the released
-binary / Docker image paths are in [`engine.md`](engine.md) §1.
+Grab the bundled synthetic example with no clone:
+`curl -fsSL https://raw.githubusercontent.com/henrikrexed/AI-Performance-Testing/main/examples/crewai-deepseek-agent/extract.json -o extract.json`
+
+That is the whole onboarding — details and the from-checkout equivalent (`python3
+engine/cli.py init`) are in [`skills-install.md`](skills-install.md). For backend runs
+you also need Dynatrace tokens/scopes + `dtctl` ([`requirements.md`](requirements.md));
+the released binary / Docker image paths are in [`engine.md`](engine.md) §1.
 
 ```bash
 cp .env.example .env     # fill in DT_ENDPOINT, DT_API_TOKEN (+ OTLP token if exporting)

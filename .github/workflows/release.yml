@@ -86,6 +86,11 @@ jobs:
           # `archetypes` extract schema. (The legacy `skills/workload-model/scripts/`
           # engine predates both; building it is what left v0.1.0 without `guided`
           # and KeyError'ing on the current CrewAI example.)
+          # Version stamp: tag -> 0.1.6; dispatch -> sanitized branch name. Baked
+          # into the binary via engine/_version.py so `--version` reports it.
+          VERSION="${GITHUB_REF_NAME#v}"
+          VERSION="${VERSION//\//-}"
+          printf '__version__ = "%s"\n' "$VERSION" > engine/_version.py
           python -m PyInstaller --noconfirm --onefile --clean \
             --name "$BINARY_NAME" \
             --paths engine \
@@ -93,7 +98,7 @@ jobs:
             --hidden-import shaping --hidden-import archetypes \
             --hidden-import clustering --hidden-import emit \
             --hidden-import g0_gate --hidden-import source_merge \
-            --hidden-import driver \
+            --hidden-import driver --hidden-import _version \
             engine/cli.py
 
       - name: Smoke test the binary
@@ -102,6 +107,7 @@ jobs:
           BIN="dist/$BINARY_NAME"
           [ "${{ matrix.target }}" = "windows-amd64" ] && BIN="dist/$BINARY_NAME.exe"
           "$BIN" --help
+          "$BIN" --version
           # agentic: the current CrewAI example (the extract v0.1.0 KeyError'd on)
           "$BIN" --extract examples/crewai-deepseek-agent/extract.json \
                  --out out_agentic --mode agentic
@@ -164,7 +170,7 @@ jobs:
           cp -r skills "$STAGE/$ROOT/skills"
           mkdir -p "$STAGE/$ROOT/docs"
           cp README.md "$STAGE/$ROOT/"
-          cp docs/engine.md docs/skills-install.md "$STAGE/$ROOT/docs/"
+          cp docs/engine.md docs/skills-install.md docs/requirements.md "$STAGE/$ROOT/docs/"
           # sanity: every skill keeps its SKILL.md marker (init --from checks it)
           for d in skills/*/; do
             test -f "$STAGE/$ROOT/$d/SKILL.md" || { echo "bundle: missing $d/SKILL.md" >&2; exit 1; }

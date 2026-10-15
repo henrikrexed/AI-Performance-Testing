@@ -106,8 +106,9 @@ def cmd_init(args) -> int:
             "  git clone https://github.com/henrikrexed/AI-Performance-Testing.git\n"
             "  cd AI-Performance-Testing\n"
             "  python3 engine/cli.py init\n\n"
-            "or run the one-liner:  curl -fsSL "
-            "https://raw.githubusercontent.com/henrikrexed/AI-Performance-Testing/main/install.sh | sh",
+            "or run the one-liner installer (binary + skills, no clone):\n\n"
+            "  curl -fsSL "
+            "https://github.com/henrikrexed/AI-Performance-Testing/releases/latest/download/install.sh | sh",
             file=sys.stderr,
         )
         return 2

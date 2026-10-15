@@ -24,7 +24,18 @@ approved model into a runnable test.
 
 ## 1. Install
 
-Pick one. Released artifacts are published per version tag on the
+Pick one. **The one-liner** installs engine + skills together and runs the dependency
+pre-flight (details in [`skills-install.md`](skills-install.md)):
+
+```bash
+# linux / macOS — engine binary + skills into your agent, checksum-verified
+curl -fsSL https://github.com/henrikrexed/AI-Performance-Testing/releases/latest/download/install.sh | sh
+
+# windows (PowerShell)
+# irm https://github.com/henrikrexed/AI-Performance-Testing/releases/latest/download/install.ps1 | iex
+```
+
+Released artifacts are published per version tag on the
 [**Releases**](https://github.com/henrikrexed/AI-Performance-Testing/releases) page by the
 [`release` workflow](../.github/workflows/release.yml).
 
@@ -220,15 +231,17 @@ entrypoints.
 ### One-step onboarding
 
 ```bash
-# two commands total: fetch + install skills, then drive
-curl -fsSL https://raw.githubusercontent.com/henrikrexed/AI-Performance-Testing/main/install.sh | sh
+# two commands total: install engine + skills, then drive
+curl -fsSL https://github.com/henrikrexed/AI-Performance-Testing/releases/latest/download/install.sh | sh
 ```
 
-`install.sh` clones the repo (or downloads the tarball when `git` is absent) and runs
-`engine/cli.py init`, which **copies every skill into your agent's skills directory and
-verifies it**. The default destination is `~/.claude/skills` (the Claude Code user-wide
-path from [`skills-install.md`](skills-install.md)); override with `--dest` (e.g.
-`.agents/skills` for the cross-client location) or `AIPT_DEST=…`.
+The release installer fetches the `workload-engine` binary + skills bundle
+(SHA256SUMS-verified, no clone, no git), unpacks into `~/.knightload/`, runs
+`workload-engine init` — which **copies every skill into your agent's skills directory
+and verifies it** — and finishes with the dependency pre-flight. The default destination
+is `~/.claude/skills` (the Claude Code user-wide path from
+[`skills-install.md`](skills-install.md)); override with `--dest` (e.g.
+`.agents/skills` for the cross-client location) or `KNIGHTLOAD_DEST=…`.
 
 ```bash
 # from a checkout, equivalently:
