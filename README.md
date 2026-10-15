@@ -139,20 +139,16 @@ git clone https://github.com/henrikrexed/AI-Performance-Testing.git
 cd AI-Performance-Testing && python3 engine/cli.py init
 ```
 
-### Try it with no backend (~10 minutes)
-
-Run the first half of the loop on the bundled synthetic example — no tenant, no tokens,
-no clone. After the one-command install above:
-
-```sh
 # SCOPE: synthetic extract -> a G0-validated model + a human-readable proposal
+# (stamped provenance.kind=demo-sample — demo data is never silently selectable)
 curl -fsSL https://raw.githubusercontent.com/henrikrexed/AI-Performance-Testing/main/examples/crewai-deepseek-agent/extract.json -o extract.json
 ~/.knightload/bin/workload-engine --extract extract.json --out out --mode agentic
 cat out/scenario-proposal.md
 
 # SYNTHESIZE: turn the committed example model into a runnable k6 script (V2a gate)
+# (--demo: the example model is demo-stamped; renderers refuse demo data without opt-in)
 curl -fsSL https://raw.githubusercontent.com/henrikrexed/AI-Performance-Testing/main/examples/workload-model.example.json -o workload-model.example.json
-node ~/.claude/skills/k6-synthesis/bin/synthesize.mjs workload-model.example.json example-out
+node ~/.claude/skills/k6-synthesis/bin/synthesize.mjs workload-model.example.json example-out --demo
 ```
 
 Read the proposal, then look at what SYNTHESIZE generated — this is also where you see the
