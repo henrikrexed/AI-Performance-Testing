@@ -21,49 +21,57 @@ binary, Docker, Kubernetes, source), see [The engine](./engine.md).
 ## Install
 
 Pick the path that fits. The fastest way to run SCOPE is the **released engine** — a
-standalone binary or a container, no Python toolchain required. To drive the whole loop
-from your coding agent, install the **skills**. To hack on the code, clone the **source**.
+checksum-verified installer, a standalone binary, or a container, no Python toolchain
+required. To drive the whole loop from your coding agent, install the **skills**. To hack
+on the code, clone the **source**.
 
-### Fastest — the released engine (binary or Docker)
+### Fastest — the released engine (installer, Docker, or binary)
 
 The engine ships as a standalone `workload-engine` binary and a multi-arch container
-(amd64 + arm64) on every release. The current pinned tag is
-[**`v0.1.0`**](https://github.com/henrikrexed/AI-Performance-Testing/releases/tag/v0.1.0);
-use [`latest`](https://github.com/henrikrexed/AI-Performance-Testing/releases/latest) to
-always track the newest.
+(amd64 + arm64) on every release. The current release is
+[**`v0.1.6`**](https://github.com/henrikrexed/AI-Performance-Testing/releases/tag/v0.1.6);
+the commands below always track
+[`latest`](https://github.com/henrikrexed/AI-Performance-Testing/releases/latest).
+
+**One-liner installer** — platform binary + the skills, checksum-verified against
+`SHA256SUMS`, installed into `~/.knightload` (Windows: `install.ps1` from the same URL):
+
+```sh
+curl -fsSL https://github.com/henrikrexed/AI-Performance-Testing/releases/latest/download/install.sh | sh
+```
 
 **Docker:**
 
 ```sh
-docker pull ghcr.io/henrikrexed/ai-performance-testing:0.1.0   # or :latest
+docker pull ghcr.io/henrikrexed/ai-performance-testing:latest   # pin a release with :0.1.6
 ```
 
 :::note
-The **image** tag is `0.1.0` (no `v`); the GitHub **release** that ships the binaries is
-tagged `v0.1.0`.
+The **image** tag is `0.1.6` (no `v`); the GitHub **release** that ships the binaries is
+tagged `v0.1.6`. `releases/latest/download/…` URLs always fetch the newest release — to
+pin, swap that segment for `releases/download/v0.1.6/…`.
 :::
 
-**Binary** — download the one for your platform from the
-[latest release](https://github.com/henrikrexed/AI-Performance-Testing/releases/latest).
-Each binary ships a CycloneDX SBOM (`<binary>.cyclonedx.json`) next to it:
+**Binary** — download the one for your platform. Each binary ships a CycloneDX SBOM
+(`<binary>.cyclonedx.json`) and a `.sha256` checksum next to it:
 
 ```sh
-VERSION=v0.1.0
 curl -fsSL -o workload-engine \
-  "https://github.com/henrikrexed/AI-Performance-Testing/releases/download/${VERSION}/workload-engine-linux-amd64"
+  "https://github.com/henrikrexed/AI-Performance-Testing/releases/latest/download/workload-engine-linux-amd64"
 chmod +x workload-engine && ./workload-engine --help
 ```
 
 macOS (Apple Silicon), Windows, and a one-shot Kubernetes `Job` are all in
 [The engine](./engine.md) §1.
 
-### Install the skills into your coding agent
+### Install — engine + skills, one command
 
-One command fetches the repo and installs the skills into your agent (default
-`~/.claude/skills`), verifying each one:
+The release installer fetches the `workload-engine` binary + skills bundle for your
+platform (SHA256SUMS-verified, no clone), installs the skills into your agent (default
+`~/.claude/skills`), verifies them, and runs the dependency pre-flight:
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/henrikrexed/AI-Performance-Testing/main/install.sh | sh
+curl -fsSL https://github.com/henrikrexed/AI-Performance-Testing/releases/latest/download/install.sh | sh
 ```
 
 It prints the exact next command — the first prompt of the guided loop. Per-agent paths

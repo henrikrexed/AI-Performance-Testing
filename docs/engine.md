@@ -24,17 +24,30 @@ approved model into a runnable test.
 
 ## 1. Install
 
-Pick one. Released artifacts are published per version tag on the
+Pick one. **The one-liner** installs engine + skills together and runs the dependency
+pre-flight (details in [`skills-install.md`](skills-install.md)):
+
+```bash
+# linux / macOS — engine binary + skills into your agent, checksum-verified
+curl -fsSL https://github.com/henrikrexed/AI-Performance-Testing/releases/latest/download/install.sh | sh
+
+# windows (PowerShell)
+# irm https://github.com/henrikrexed/AI-Performance-Testing/releases/latest/download/install.ps1 | iex
+```
+
+Released artifacts are published per version tag on the
 [**Releases**](https://github.com/henrikrexed/AI-Performance-Testing/releases) page by the
 [`release` workflow](../.github/workflows/release.yml).
+The snippets below use `releases/latest/download/…`, which always fetches the newest
+release (currently [`v0.1.6`](https://github.com/henrikrexed/AI-Performance-Testing/releases/tag/v0.1.6));
+to pin, swap that URL segment for `releases/download/v0.1.6/…`.
 
 ### Linux
 
 ```bash
 # amd64 (use workload-engine-linux-arm64 on ARM hosts)
-VERSION=v0.1.0
 curl -fsSL -o workload-engine \
-  "https://github.com/henrikrexed/AI-Performance-Testing/releases/download/${VERSION}/workload-engine-linux-amd64"
+  "https://github.com/henrikrexed/AI-Performance-Testing/releases/latest/download/workload-engine-linux-amd64"
 chmod +x workload-engine
 sudo mv workload-engine /usr/local/bin/
 workload-engine --help
@@ -43,10 +56,9 @@ workload-engine --help
 ### macOS
 
 ```bash
-VERSION=v0.1.0
-# Apple Silicon: darwin-arm64 · Intel: darwin-amd64
+# Only an Apple-Silicon (arm64) binary ships. Intel Macs: run it under Rosetta 2, or use Docker.
 curl -fsSL -o workload-engine \
-  "https://github.com/henrikrexed/AI-Performance-Testing/releases/download/${VERSION}/workload-engine-darwin-arm64"
+  "https://github.com/henrikrexed/AI-Performance-Testing/releases/latest/download/workload-engine-darwin-arm64"
 chmod +x workload-engine
 # first run on a downloaded binary: clear the quarantine flag
 xattr -d com.apple.quarantine workload-engine 2>/dev/null || true
@@ -57,9 +69,8 @@ workload-engine --help
 ### Windows (PowerShell)
 
 ```powershell
-$Version = "v0.1.0"
 Invoke-WebRequest `
-  -Uri "https://github.com/henrikrexed/AI-Performance-Testing/releases/download/$Version/workload-engine-windows-amd64.exe" `
+  -Uri "https://github.com/henrikrexed/AI-Performance-Testing/releases/latest/download/workload-engine-windows-amd64.exe" `
   -OutFile "workload-engine.exe"
 .\workload-engine.exe --help
 ```
@@ -69,17 +80,17 @@ Invoke-WebRequest `
 The image is published multi-arch (amd64 + arm64) to GHCR:
 
 ```bash
-docker pull ghcr.io/henrikrexed/ai-performance-testing:latest   # or :0.1.0
+docker pull ghcr.io/henrikrexed/ai-performance-testing:latest   # pin a release with :0.1.6
 # mount a working directory; extract.json goes in, results come out under ./out
 docker run --rm -v "$PWD":/work \
   ghcr.io/henrikrexed/ai-performance-testing:latest \
   --extract /work/extract.json --out /work/out
 ```
 
-> **Image tag vs. release tag.** The container is published as `:0.1.0` / `:0.1` /
-> `:latest` — semver tags carry **no** leading `v`. The GitHub **release** that ships the
-> binaries is tagged `v0.1.0` (with the `v`); that's the string in the binary download
-> URLs above.
+> **Image tag vs. release tag.** The container is published as `:latest` / `:0.1` /
+> `:0.1.6` — semver tags carry **no** leading `v`. The GitHub **release** that ships the
+> binaries is tagged `v0.1.6` (with the `v`); that's the string in the pinned binary
+> download URLs above.
 
 ### Kubernetes
 
@@ -99,7 +110,7 @@ spec:
       restartPolicy: Never
       containers:
         - name: engine
-          image: ghcr.io/henrikrexed/ai-performance-testing:0.1.0
+          image: ghcr.io/henrikrexed/ai-performance-testing:0.1.6   # pin; :latest also exists
           args: ["--extract", "/work/extract.json", "--out", "/work/out"]
           volumeMounts:
             - { name: extract, mountPath: /work/extract.json, subPath: extract.json }
@@ -220,15 +231,17 @@ entrypoints.
 ### One-step onboarding
 
 ```bash
-# two commands total: fetch + install skills, then drive
-curl -fsSL https://raw.githubusercontent.com/henrikrexed/AI-Performance-Testing/main/install.sh | sh
+# two commands total: install engine + skills, then drive
+curl -fsSL https://github.com/henrikrexed/AI-Performance-Testing/releases/latest/download/install.sh | sh
 ```
 
-`install.sh` clones the repo (or downloads the tarball when `git` is absent) and runs
-`engine/cli.py init`, which **copies every skill into your agent's skills directory and
-verifies it**. The default destination is `~/.claude/skills` (the Claude Code user-wide
-path from [`skills-install.md`](skills-install.md)); override with `--dest` (e.g.
-`.agents/skills` for the cross-client location) or `AIPT_DEST=…`.
+The release installer fetches the `workload-engine` binary + skills bundle
+(SHA256SUMS-verified, no clone, no git), unpacks into `~/.knightload/`, runs
+`workload-engine init` — which **copies every skill into your agent's skills directory
+and verifies it** — and finishes with the dependency pre-flight. The default destination
+is `~/.claude/skills` (the Claude Code user-wide path from
+[`skills-install.md`](skills-install.md)); override with `--dest` (e.g.
+`.agents/skills` for the cross-client location) or `KNIGHTLOAD_DEST=…`.
 
 ```bash
 # from a checkout, equivalently:

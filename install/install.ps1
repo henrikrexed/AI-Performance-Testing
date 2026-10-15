@@ -5,8 +5,10 @@
 # Fetches the workload-engine binary + skills bundle for Windows from a GitHub
 # Release (checksum-verified against SHA256SUMS), unpacks into
 # %LOCALAPPDATA%\KnightLoad, installs the skills into your coding agent via
-# `workload-engine init --from ...`, and prints the quickstart. No repo clone,
-# no Python toolchain, no admin rights.
+# `workload-engine init --from ...`, runs the install-time dependency
+# pre-flight (exact fix commands for anything missing), and prints the
+# quickstart. No repo clone, no admin rights. The engine binary itself needs
+# no Python or Node.
 #
 # Overrides (when run as a script, not via iex):
 #   .\install.ps1 -Version v0.1.5 -InstallDir C:\bin\KnightLoad -SkillsDest $HOME\.claude\skills
@@ -54,6 +56,8 @@ $binDir = Join-Path $InstallDir 'bin'
 New-Item -ItemType Directory -Force -Path $binDir | Out-Null
 $bin = Join-Path $binDir "$Engine-$Ver.exe"
 Copy-Item (Join-Path $tmp "$Engine-$Platform.exe") $bin -Force
+# stable unversioned name ($InstallDir\bin\workload-engine.exe) for quickstarts
+Copy-Item $bin (Join-Path $binDir "$Engine.exe") -Force
 
 $skillsDir = Join-Path $InstallDir 'skills'
 if (Test-Path $skillsDir) { Remove-Item $skillsDir -Recurse -Force }
@@ -71,12 +75,39 @@ if ($SkillsDest) { $initArgs += @('--dest', $SkillsDest) }
 & $bin @initArgs
 if ($LASTEXITCODE -ne 0) { throw "install.ps1: $Engine init failed with exit code $LASTEXITCODE" }
 
+# install-time dependency pre-flight: report anything the skills need with the
+# exact fix command - never a late mid-task failure. The install itself still
+# succeeds; this is a health report, not a gate.
+$setup = Join-Path $skillsDir 'setup.ps1'
+if (Test-Path $setup) {
+  $Python = if (Get-Command python -ErrorAction SilentlyContinue) { 'python' }
+            elseif (Get-Command py -ErrorAction SilentlyContinue) { 'py -3' }
+            else { $null }
+  if ($Python) {
+    Write-Host '==> skill dependency pre-flight'
+    & powershell -NoProfile -ExecutionPolicy Bypass -File $setup
+    if ($LASTEXITCODE -ne 0) {
+      Write-Host ''
+      Write-Host "  (pre-flight reported missing tools above - the engine and skills are"
+      Write-Host "   installed; fix the items marked MISS, then re-run:  powershell -File $setup)"
+    }
+  } else {
+    Write-Host '==> skill dependency pre-flight: SKIPPED (python not found)'
+    Write-Host '  the skills need Python >= 3.9 and Node >= 18; install them, then verify:'
+    Write-Host "    powershell -ExecutionPolicy Bypass -File $setup"
+    Write-Host '  https://www.python.org/downloads/   https://nodejs.org/'
+  }
+}
+
+$stableBin = Join-Path $binDir "$Engine.exe"
 Write-Host ''
 Write-Host 'Installed:'
-Write-Host "  engine : $bin"
-Write-Host "  skills : $skillsDir"
+Write-Host "  engine : $stableBin  (-> $bin)"
+Write-Host "  skills : $skillsDir  (installed into your agent by '$Engine init')"
 Write-Host ''
 Write-Host 'Quickstart:'
-Write-Host "  $bin --extract <extract.json> --out out --mode agentic"
-Write-Host "  $bin guided --extract <extract.json> --out out --mode agentic --yes"
+Write-Host "  $stableBin --extract <extract.json> --out out --mode agentic"
+Write-Host "  $stableBin guided --extract <extract.json> --out out --mode agentic --yes"
 Write-Host '  (guided drives propose -> choose -> generate -> try; add --try for a k6 smoke)'
+Write-Host '  example extract (no clone needed):'
+Write-Host "    Invoke-WebRequest -Uri https://raw.githubusercontent.com/$Repo/main/examples/crewai-deepseek-agent/extract.json -OutFile extract.json"

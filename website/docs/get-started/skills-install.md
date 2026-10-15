@@ -26,27 +26,30 @@ Skills in this repo:
 > the same way and the guided flow hands them the approved model. Pick your renderer in
 > the guided flow's step 2.
 
-## Quickstart — two commands
+## Quickstart — one command, no clone
 
-No manual symlinking. One command installs the skills into your coding agent; the second
-is the first prompt that starts the guided loop.
+The release installer does everything: fetches the latest `workload-engine` binary +
+skills bundle (SHA256SUMS-verified), unpacks into `~/.knightload/`, installs the skills
+into your coding agent (`workload-engine init`, default `~/.claude/skills`), runs the
+install-time dependency pre-flight, and prints the quickstart. No git, no Python
+toolchain for the engine itself:
 
 ```bash
-# 1 — fetch the repo and install the skills into ~/.claude/skills (verifies them)
-curl -fsSL https://raw.githubusercontent.com/henrikrexed/AI-Performance-Testing/main/install.sh | sh
+# 1 — install engine + skills
+curl -fsSL https://github.com/henrikrexed/AI-Performance-Testing/releases/latest/download/install.sh | sh
+#    Windows (PowerShell):
+#    irm https://github.com/henrikrexed/AI-Performance-Testing/releases/latest/download/install.ps1 | iex
 ```
 
-`install.sh` clones the repo (or downloads a tarball when `git` is absent) and runs
-`engine/cli.py init`, which copies every bundled skill into your agent's skills directory
-and verifies each one loads. The default destination is `~/.claude/skills` (the Claude
-Code user-wide path); override with `--dest` or `AIPT_DEST`. From an existing checkout the
-no-curl equivalent is:
+`KNIGHTLOAD_VERSION` / `KNIGHTLOAD_DIR` / `KNIGHTLOAD_DEST` override the release,
+install dir, and skills destination. From an existing checkout the equivalent is:
 
 ```bash
 git clone https://github.com/henrikrexed/AI-Performance-Testing.git
 cd AI-Performance-Testing
 python3 engine/cli.py init                       # -> ~/.claude/skills, then verifies
 python3 engine/cli.py init --dest .agents/skills # cross-client location instead
+sh skills/setup.sh                               # dependency pre-flight
 ```
 
 `init` prints the exact next command. The second command of the quickstart is that

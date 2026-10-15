@@ -88,53 +88,71 @@ opt-in.** Nothing executes against any environment until you say so.
 
 ## Install
 
-Three paths. Fastest is the **released engine** — a standalone binary or a container, no
-Python toolchain. To drive the loop from your coding agent, install the **skills**. To
-hack on the code, use **source**.
-
-**Released engine** — pinned [`v0.1.0`](https://github.com/henrikrexed/AI-Performance-Testing/releases/tag/v0.1.0)
-(track [`latest`](https://github.com/henrikrexed/AI-Performance-Testing/releases/latest)).
-Each binary ships a CycloneDX SBOM alongside it:
+One command — engine binary **and** the skills for your coding agent, checksum-verified,
+no clone, no root (linux/macOS; the engine binary itself needs no Python or Node):
 
 ```sh
-# Docker (multi-arch: amd64 + arm64)
-docker pull ghcr.io/henrikrexed/ai-performance-testing:0.1.0   # or :latest
+curl -fsSL https://github.com/henrikrexed/AI-Performance-Testing/releases/latest/download/install.sh | sh
+```
 
-# ...or the binary for your platform (linux-amd64/arm64 · darwin-arm64 · windows-amd64.exe)
-VERSION=v0.1.0
+Windows (PowerShell):
+
+```powershell
+irm https://github.com/henrikrexed/AI-Performance-Testing/releases/latest/download/install.ps1 | iex
+```
+
+What it does: fetches the latest release's `workload-engine` binary + skills bundle for
+your platform (SHA256SUMS-verified), unpacks into `~/.knightload/`
+(`%LOCALAPPDATA%\KnightLoad` on Windows), installs the skills into your agent
+(`workload-engine init`, default `~/.claude/skills`), runs the install-time dependency
+pre-flight (exact fix commands for anything missing), and prints the quickstart.
+Override with `KNIGHTLOAD_VERSION` / `KNIGHTLOAD_DIR` / `KNIGHTLOAD_DEST`.
+
+**Docker** (multi-arch: amd64 + arm64) — path unchanged:
+
+```sh
+docker pull ghcr.io/henrikrexed/ai-performance-testing:latest   # pin a release with :0.1.6
+```
+
+**Manual binary** — current release [`v0.1.6`](https://github.com/henrikrexed/AI-Performance-Testing/releases/tag/v0.1.6);
+every release ships binaries for linux-amd64/arm64 · darwin-arm64 · windows-amd64.exe,
+each with a CycloneDX SBOM; per-platform commands in [`docs/engine.md`](docs/engine.md).
+The commands below always track [`latest`](https://github.com/henrikrexed/AI-Performance-Testing/releases/latest):
+
+```sh
 curl -fsSL -o workload-engine \
-  "https://github.com/henrikrexed/AI-Performance-Testing/releases/download/${VERSION}/workload-engine-linux-amd64"
+  "https://github.com/henrikrexed/AI-Performance-Testing/releases/latest/download/workload-engine-linux-amd64"
 chmod +x workload-engine && ./workload-engine --help
 ```
 
-> The **image** tag is `0.1.0` (no `v`); the **release** that ships the binaries is tagged
-> `v0.1.0`. macOS / Windows / Kubernetes paths are in [`docs/engine.md`](docs/engine.md).
+> `releases/latest/download/…` URLs always fetch the newest release — to pin, swap that
+> segment for `releases/download/v0.1.6/…`. The Docker **image** tag is `0.1.6` (no `v`);
+> the GitHub **release** that ships the binaries is tagged `v0.1.6`. macOS / Windows /
+> Kubernetes paths are in [`docs/engine.md`](docs/engine.md).
 
-**Skills into your coding agent** — one command fetches the repo, installs the skills
-(default `~/.claude/skills`), verifies them, and prints the first prompt:
-
-```sh
-curl -fsSL https://raw.githubusercontent.com/henrikrexed/AI-Performance-Testing/main/install.sh | sh
-```
-
-**From source** — `git clone` the repo (see [Try it with no backend](#try-it-with-no-backend-10-minutes)
-below); full per-agent install in [`docs/skills-install.md`](docs/skills-install.md).
-
-### Try it with no backend (~10 minutes)
-
-Run the first half of the loop on the bundled synthetic example — no tenant, no tokens:
+**Contributors** — to hack on the repo itself, clone it and install the skills from the
+checkout (`python3 engine/cli.py init`, per-agent details in
+[`docs/skills-install.md`](docs/skills-install.md)):
 
 ```sh
 git clone https://github.com/henrikrexed/AI-Performance-Testing.git
-cd AI-Performance-Testing
+cd AI-Performance-Testing && python3 engine/cli.py init
+```
 
-# SCOPE: synthetic extraction → a G0-validated model + a human-readable proposal
-(cd skills/workload-model && python3 scripts/build_example.py \
-  && cat out/example-frontend/scenario-proposal.md)
+### Try it with no backend (~10 minutes)
+
+Run the first half of the loop on the bundled synthetic example — no tenant, no tokens,
+no clone. After the one-command install above:
+
+```sh
+# SCOPE: synthetic extract -> a G0-validated model + a human-readable proposal
+curl -fsSL https://raw.githubusercontent.com/henrikrexed/AI-Performance-Testing/main/examples/crewai-deepseek-agent/extract.json -o extract.json
+~/.knightload/bin/workload-engine --extract extract.json --out out --mode agentic
+cat out/scenario-proposal.md
 
 # SYNTHESIZE: turn the committed example model into a runnable k6 script (V2a gate)
-(cd skills/k6-synthesis \
-  && node bin/synthesize.mjs ../../examples/workload-model.example.json /tmp/example-out)
+curl -fsSL https://raw.githubusercontent.com/henrikrexed/AI-Performance-Testing/main/examples/workload-model.example.json -o workload-model.example.json
+node ~/.claude/skills/k6-synthesis/bin/synthesize.mjs workload-model.example.json example-out
 ```
 
 Read the proposal, then look at what SYNTHESIZE generated — this is also where you see the
