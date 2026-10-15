@@ -94,21 +94,25 @@ Run the first half of the loop on the bundled synthetic example — no tenant, n
 From a source checkout:
 
 ```sh
-# SCOPE: synthetic extraction -> a G0-validated model + a human-readable proposal
+# SCOPE: synthetic extraction -> a G0-validated model + human-readable proposal
+# (output is stamped provenance.kind=demo-sample — demo data is never silently selectable)
 (cd skills/workload-model && python3 scripts/build_example.py \
   && cat out/example-frontend/scenario-proposal.md)
 
 # SYNTHESIZE: turn the committed example model into a runnable k6 script (V2a gate)
+# --demo: the example model is demo-stamped; renderers refuse demo data without opt-in
 (cd skills/k6-synthesis \
-  && node bin/synthesize.mjs ../../examples/workload-model.example.json /tmp/example-out)
+  && node bin/synthesize.mjs ../../examples/workload-model.example.json /tmp/example-out --demo)
 ```
 
 <DemoClip name="utility" aspect="800 / 508" caption="Steps 1–2 in action: SCOPE drafts the workload profile, the V1 gate confirms it, and SYNTHESIZE emits the runnable k6 script." />
 
 Read the proposal, then look at what SYNTHESIZE generated. The example artifacts under
 [`examples/`](https://github.com/henrikrexed/AI-Performance-Testing/tree/main/examples)
-show exactly what each stage produces. This is also where you'll see the V1 gate in action:
-synthesis **refuses** a model that hasn't been approved.
+show exactly what each stage produces. Two guards are visible here: drop `--demo` from
+the SYNTHESIZE command and the renderer refuses the model outright (demo data is never
+silently selectable — `--demo` or `WORKLOAD_MODEL_ALLOW_DEMO=1` is the explicit opt-in),
+and synthesis also refuses any model a human hasn't approved (the V1 gate).
 
 ## Run the full live loop (with a Dynatrace trial)
 
@@ -121,6 +125,13 @@ When you want the real thing, point KnightLoad at your own backend:
 3. Ask for the loop in plain language — *"scope a load test for service checkout over the
    last 3 hours"* — and walk the five stages: SCOPE → VALIDATE → SYNTHESIZE → EXECUTE →
    ANALYZE.
+
+The first live-run step is a **fail-closed environment probe**
+(`skills/workload-model/scripts/env_probe.py`: `dtctl` present · DQL reachable · target
+observed in the window). No probe, no extraction — and never a silent fallback to the
+bundled example. Every model the loop builds is stamped with its provenance
+(`extracted` from your tenant, or `demo-sample`), so demo data cannot masquerade as a
+real scan.
 
 The full worked tutorial deploys a small demo AI-agent app, generates a baseline window,
 and runs all five stages for real — including the V1 approval gate refusing synthesis until

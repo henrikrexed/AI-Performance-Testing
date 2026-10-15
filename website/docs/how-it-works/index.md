@@ -37,7 +37,8 @@ flowchart LR
 
 - **SCOPE.** Query a clean telemetry window and extract the facts a realistic test needs —
   journeys, archetype split, arrival profile, think-times, and payload strategy — into a
-  `workload-model.json`.
+  `workload-model.json` stamped with its provenance (`extracted` from your tenant, or
+  `demo-sample` — demo data is never silently selectable).
 - **VALIDATE.** A human reads the proposal and approves, adjusts, or rejects it — this is
   the gate the whole method exists for.
 - **SYNTHESIZE.** Turn the approved model into a runnable, committed test with synthetic

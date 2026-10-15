@@ -135,6 +135,7 @@ cd AI-Performance-Testing/skills/workload-model
 pip install "jsonschema>=4,<5"
 
 # bundled synthetic example: extract -> G0-validated model + proposal
+# (output is stamped provenance.kind=demo-sample — demo data is never silently selectable)
 python3 scripts/build_example.py
 cat out/example-frontend/scenario-proposal.md
 
@@ -177,12 +178,17 @@ SKILL.md; any backend that emits the same JSON shape works.
 `skills/workload-model/fixtures/example_extract.json` is a complete synthetic extract
 showing the exact schema.
 
+Before any real extraction, the skills run a fail-closed environment probe
+(`skills/workload-model/scripts/env_probe.py`: `dtctl` present · DQL reachable · target
+observed in the window). No probe, no extraction — never a silent fallback to the
+example data.
+
 ### Step 2 — run the engine (SCOPE)
 
 ```bash
-# released binary
+# released binary (real extract -> model stamped provenance.kind=extracted)
 workload-engine --extract extract.json --out ./out --mode agentic
-# from source, equivalently:
+# from source, the same engine on the bundled synthetic example (demo-stamped):
 #   (cd skills/workload-model && python3 scripts/build_example.py)
 ```
 
@@ -191,7 +197,9 @@ workload-engine --extract extract.json --out ./out --mode agentic
   service. Same engine, different terminal signal.
 - **Outputs land in the output dir:**
   - `workload-model.json` — the schema-valid (§4 v1.1) model: journeys + weights,
-    open/closed arrival profile with Little's-Law check, payload pools, and hard caps.
+    open/closed arrival profile with Little's-Law check, payload pools, and hard caps —
+    stamped with a `provenance` field (`extracted` | `demo-sample`) recording where its
+    facts came from.
   - `scenario-proposal.md` — the human-readable proposal (what was analyzed, journeys,
     arrival profile, payload strategy, where it will run, risks, decision requested).
 - The engine **self-checks with the G0 gate** and prints the result. It **exits `0`
