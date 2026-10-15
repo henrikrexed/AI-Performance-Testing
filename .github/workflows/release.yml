@@ -178,9 +178,12 @@ jobs:
           mkdir -p staged
           tar czf "staged/${BINARY_NAME}-skills-${VERSION}.tar.gz" -C "$STAGE" "$ROOT"
           (cd "$STAGE" && zip -qr "$GITHUB_WORKSPACE/staged/${BINARY_NAME}-skills-${VERSION}.zip" "$ROOT")
-          # sanity: the tarball unpacks to exactly one top-level dir with skills/ inside
-          test "$(tar tzf "staged/${BINARY_NAME}-skills-${VERSION}.tar.gz" | head -1 | cut -d/ -f1)" = "$ROOT"
-          tar tzf "staged/${BINARY_NAME}-skills-${VERSION}.tar.gz" | grep -q "skills/workload-model/SKILL.md"
+          # sanity: the tarball unpacks to exactly one top-level dir with skills/ inside.
+          # Write the listing to a file first: `tar | head -1` races under pipefail
+          # (head exits, tar takes SIGPIPE -> spurious write-error failure).
+          tar tzf "staged/${BINARY_NAME}-skills-${VERSION}.tar.gz" > "$STAGE/listing.txt"
+          test "$(head -1 "$STAGE/listing.txt" | cut -d/ -f1)" = "$ROOT"
+          grep -q "skills/workload-model/SKILL.md" "$STAGE/listing.txt"
           ls -la staged
 
       - name: Upload bundle artifacts
