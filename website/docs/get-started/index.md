@@ -29,7 +29,7 @@ on the code, clone the **source**.
 
 The engine ships as a standalone `workload-engine` binary and a multi-arch container
 (amd64 + arm64) on every release. The current release is
-[**`v0.1.6`**](https://github.com/henrikrexed/AI-Performance-Testing/releases/tag/v0.1.6);
+[**`v0.1.7`**](https://github.com/henrikrexed/AI-Performance-Testing/releases/tag/v0.1.7);
 the commands below always track
 [`latest`](https://github.com/henrikrexed/AI-Performance-Testing/releases/latest).
 
@@ -43,13 +43,13 @@ curl -fsSL https://github.com/henrikrexed/AI-Performance-Testing/releases/latest
 **Docker:**
 
 ```sh
-docker pull ghcr.io/henrikrexed/ai-performance-testing:latest   # pin a release with :0.1.6
+docker pull ghcr.io/henrikrexed/ai-performance-testing:latest   # pin a release with :0.1.7
 ```
 
 :::note
-The **image** tag is `0.1.6` (no `v`); the GitHub **release** that ships the binaries is
-tagged `v0.1.6`. `releases/latest/download/…` URLs always fetch the newest release — to
-pin, swap that segment for `releases/download/v0.1.6/…`.
+The **image** tag is `0.1.7` (no `v`); the GitHub **release** that ships the binaries is
+tagged `v0.1.7`. `releases/latest/download/…` URLs always fetch the newest release — to
+pin, swap that segment for `releases/download/v0.1.7/…`.
 :::
 
 **Binary** — download the one for your platform. Each binary ships a CycloneDX SBOM

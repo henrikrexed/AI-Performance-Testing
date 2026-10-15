@@ -39,8 +39,8 @@ Released artifacts are published per version tag on the
 [**Releases**](https://github.com/henrikrexed/AI-Performance-Testing/releases) page by the
 [`release` workflow](../.github/workflows/release.yml).
 The snippets below use `releases/latest/download/…`, which always fetches the newest
-release (currently [`v0.1.6`](https://github.com/henrikrexed/AI-Performance-Testing/releases/tag/v0.1.6));
-to pin, swap that URL segment for `releases/download/v0.1.6/…`.
+release (currently [`v0.1.7`](https://github.com/henrikrexed/AI-Performance-Testing/releases/tag/v0.1.7));
+to pin, swap that URL segment for `releases/download/v0.1.7/…`.
 
 ### Linux
 
@@ -80,7 +80,7 @@ Invoke-WebRequest `
 The image is published multi-arch (amd64 + arm64) to GHCR:
 
 ```bash
-docker pull ghcr.io/henrikrexed/ai-performance-testing:latest   # pin a release with :0.1.6
+docker pull ghcr.io/henrikrexed/ai-performance-testing:latest   # pin a release with :0.1.7
 # mount a working directory; extract.json goes in, results come out under ./out
 docker run --rm -v "$PWD":/work \
   ghcr.io/henrikrexed/ai-performance-testing:latest \
@@ -88,8 +88,8 @@ docker run --rm -v "$PWD":/work \
 ```
 
 > **Image tag vs. release tag.** The container is published as `:latest` / `:0.1` /
-> `:0.1.6` — semver tags carry **no** leading `v`. The GitHub **release** that ships the
-> binaries is tagged `v0.1.6` (with the `v`); that's the string in the pinned binary
+> `:0.1.7` — semver tags carry **no** leading `v`. The GitHub **release** that ships the
+> binaries is tagged `v0.1.7` (with the `v`); that's the string in the pinned binary
 > download URLs above.
 
 ### Kubernetes
@@ -110,7 +110,7 @@ spec:
       restartPolicy: Never
       containers:
         - name: engine
-          image: ghcr.io/henrikrexed/ai-performance-testing:0.1.6   # pin; :latest also exists
+          image: ghcr.io/henrikrexed/ai-performance-testing:0.1.7   # pin; :latest also exists
           args: ["--extract", "/work/extract.json", "--out", "/work/out"]
           volumeMounts:
             - { name: extract, mountPath: /work/extract.json, subPath: extract.json }

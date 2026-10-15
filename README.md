@@ -111,10 +111,10 @@ Override with `KNIGHTLOAD_VERSION` / `KNIGHTLOAD_DIR` / `KNIGHTLOAD_DEST`.
 **Docker** (multi-arch: amd64 + arm64) — path unchanged:
 
 ```sh
-docker pull ghcr.io/henrikrexed/ai-performance-testing:latest   # pin a release with :0.1.6
+docker pull ghcr.io/henrikrexed/ai-performance-testing:latest   # pin a release with :0.1.7
 ```
 
-**Manual binary** — current release [`v0.1.6`](https://github.com/henrikrexed/AI-Performance-Testing/releases/tag/v0.1.6);
+**Manual binary** — current release [`v0.1.7`](https://github.com/henrikrexed/AI-Performance-Testing/releases/tag/v0.1.7);
 every release ships binaries for linux-amd64/arm64 · darwin-arm64 · windows-amd64.exe,
 each with a CycloneDX SBOM; per-platform commands in [`docs/engine.md`](docs/engine.md).
 The commands below always track [`latest`](https://github.com/henrikrexed/AI-Performance-Testing/releases/latest):
@@ -126,8 +126,8 @@ chmod +x workload-engine && ./workload-engine --help
 ```
 
 > `releases/latest/download/…` URLs always fetch the newest release — to pin, swap that
-> segment for `releases/download/v0.1.6/…`. The Docker **image** tag is `0.1.6` (no `v`);
-> the GitHub **release** that ships the binaries is tagged `v0.1.6`. macOS / Windows /
+> segment for `releases/download/v0.1.7/…`. The Docker **image** tag is `0.1.7` (no `v`);
+> the GitHub **release** that ships the binaries is tagged `v0.1.7`. macOS / Windows /
 > Kubernetes paths are in [`docs/engine.md`](docs/engine.md).
 
 **Contributors** — to hack on the repo itself, clone it and install the skills from the
