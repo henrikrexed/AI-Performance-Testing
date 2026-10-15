@@ -139,6 +139,12 @@ git clone https://github.com/henrikrexed/AI-Performance-Testing.git
 cd AI-Performance-Testing && python3 engine/cli.py init
 ```
 
+### Try it with no backend (~10 minutes)
+
+Run the first half of the loop on the bundled synthetic example — no tenant, no tokens,
+no clone. After the one-command install above:
+
+```sh
 # SCOPE: synthetic extract -> a G0-validated model + a human-readable proposal
 # (stamped provenance.kind=demo-sample — demo data is never silently selectable)
 curl -fsSL https://raw.githubusercontent.com/henrikrexed/AI-Performance-Testing/main/examples/crewai-deepseek-agent/extract.json -o extract.json
